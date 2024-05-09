@@ -1,3 +1,5 @@
 *
 !public/
 !.gitignore
+!test-big-image.jpg
+!sample-big-pdf.pdf
