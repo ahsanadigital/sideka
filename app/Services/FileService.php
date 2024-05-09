@@ -37,7 +37,7 @@ class FileService
      * @param string $uploadPath The path where the file will be uploaded.
      * @return string The path where the file was uploaded.
      */
-    public static function upload(Request $request, string $uploadPath): string
+    public static function upload(Request $request, string $uploadPath = 'temp'): string
     {
         if($request->file('image')) {
             $path = $request->file('image')->store($uploadPath, "public");
