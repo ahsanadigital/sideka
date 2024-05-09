@@ -26,7 +26,7 @@ class FilePDFServiceTest extends TestCase
     public function it_can_compress_a_pdf_file()
     {
         // Arrange
-        $filePath = 'test-file.pdf';
+        $filePath = 'sample-big-pdf.pdf';
         $destinationPath = 'compressed';
         $content = 'Dummy PDF content';
 
@@ -76,7 +76,7 @@ class FilePDFServiceTest extends TestCase
     public function it_can_delete_original_file_after_compression()
     {
         // Arrange
-        $filePath = 'test-file.pdf';
+        $filePath = 'sample-big-pdf.pdf';
         $destinationPath = 'compressed';
         $content = 'Dummy PDF content';
 

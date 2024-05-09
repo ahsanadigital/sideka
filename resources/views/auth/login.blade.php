@@ -4,7 +4,7 @@
     <h2 class="mb-3 fs-7 fw-bolder">Selamat Datang di SIDEKA</h2>
     <p class=" mb-9">Silahkan masuk terlebih dahulu sebelum mengelola data.</p>
 
-    <form method="POST" action="{{ route('login') }}" data-success-message="Anda telah terautentikasi! Sistem akan mengarahkan anda ke dalam panel dasbor dalam waktu 5 detik." data-redirect-on-success="{{ route('home') }}">
+    <form method="POST" action="{{ route('login') }}" class="form-ajax" data-success-message="Anda telah terautentikasi! Sistem akan mengarahkan anda ke dalam panel dasbor dalam waktu 5 detik." data-redirect-on-success="{{ route('home') }}">
         @csrf
         <div class="mb-3">
             <label for="email" class="form-label">Surel</label>
@@ -47,6 +47,6 @@
                 </a>
             @endif
         </div>
-        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>
+        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Masuk</button>
     </form>
 @endsection

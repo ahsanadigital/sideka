@@ -3,11 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\RoleUserEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -46,6 +49,15 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutRole($roles, $guard = null)
+ * @property string $fullname
+ * @property string|null $image
+ * @property int|null $users_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Decree> $decree
+ * @property-read int|null $decree_count
+ * @property-read User|null $parent
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFullname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUsersId($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -101,5 +113,31 @@ class User extends Authenticatable
     public function decree(): HasMany
     {
         return $this->hasMany(Decree::class);
+    }
+
+    /**
+     * Getting array of Role Users from Enum
+     *
+     * @return Collection
+     */
+    public static function roleEnums(): Collection
+    {
+        return collect(RoleUserEnum::cases())->pluck('value');
+    }
+
+    /**
+     * Getting role string based on user
+     *
+     * @return string
+     */
+    public function getRoles(): string
+    {
+        return $this->roles->pluck('name')->map(function($item) {
+            return match($item) {
+                'region' => RoleUserEnum::DKD,
+                'regency' => RoleUserEnum::DKC,
+                'district' => RoleUserEnum::DKR,
+            };
+        })->map(fn($items) => $items->label())->implode(', ');
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,10 +14,6 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        collect([
-            ['name' => 'dkd'],
-            ['name' => 'dkc'],
-            ['name' => 'dkr'],
-        ])->each(fn($items) => Role::create($items));
+        User::roleEnums()->each(fn($items) => Role::create(['name' => $items]));
     }
 }

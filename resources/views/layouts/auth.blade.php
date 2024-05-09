@@ -16,6 +16,7 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('dist/images/logos/favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/extra-libs/toastr/toastr.min.css') }}" />
     <!-- Owl Carousel -->
     <link rel="stylesheet" href="{{ asset('dist/libs/owl.carousel/dist/assets/owl.carousel.min.c') }}ss">
     <!-- Core Css -->
@@ -34,8 +35,8 @@
             <div class="position-relative z-index-5">
                 <div class="row">
                     <div class="col-xl-7 col-xxl-8">
-                        <a href="./index.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <img src="{{ asset('dist/images/logos/dark-logo.svg') }}" width="180" alt="">
+                        <a href="{{ url('/') }}" class="text-nowrap logo-img d-block px-4 py-9 w-100">
+                            <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" width="150" alt="Logo SIDEKA" />
                         </a>
                         <div class="d-none d-xl-flex align-items-center justify-content-center"
                             style="height: calc(100vh - 80px);">
@@ -70,6 +71,7 @@
     <script src="{{ asset('dist/js/custom.js') }}"></script>
     <!-- current page js files -->
     <script src="{{ asset('dist/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('assets/extra-libs/toastr/toastr.min.js') }}"></script>
 
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
     @include('components.scripts.submitform')

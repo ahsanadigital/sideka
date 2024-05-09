@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Decree;
 use App\Http\Requests\StoreDecreeRequest;
 use App\Http\Requests\UpdateDecreeRequest;
+use Illuminate\Http\Request;
 
 class DecreeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()) {}
+
+        return view('page.panel.decree');
     }
 
     /**

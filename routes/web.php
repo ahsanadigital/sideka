@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    dd(\Storage::exists('sample-big-pdf.pdf'));
-});
+Route::get('/', fn() => view('welcome'));
 
 Auth::routes(['register' => false]);
 
 Route::prefix('/panel')->group(function() {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::resource('decree', App\Http\Controllers\DecreeController::class)->only('index');
+    Route::resource('member', App\Http\Controllers\MemberController::class)->only('index');
+    Route::resource('meeting', App\Http\Controllers\MeetingController::class)->only('index');
+    Route::resource('achievement', App\Http\Controllers\AchievementController::class)->only('index');
 });

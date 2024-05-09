@@ -51,6 +51,36 @@ function swalToast(icon, title, text, position = "top-end") {
 }
 
 /**
+ * Displays a toastr.js toast notification with the provided options.
+ *
+ * @param {string} type - The type of the toast notification (e.g., 'success', 'error', 'warning', 'info').
+ * @param {string} title - The title of the toast notification.
+ * @param {string} message - The message content of the toast notification.
+ * @param {string} position - The position of the toast notification (e.g., 'toast-top-left', 'toast-top-right', 'toast-bottom-left', 'toast-bottom-right').
+ */
+function toastrToast(type, title, message, position = "toast-top-right") {
+    toastr.options = {
+        closeButton: true,
+        debug: false,
+        newestOnTop: true,
+        progressBar: true,
+        positionClass: position,
+        preventDuplicates: false,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "3000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+    };
+
+    toastr[type](message, title);
+}
+
+/**
  * Sweetalert with mixin bootstrap 5.
  */
 const swalWithBootstrapButtons = Swal.mixin({
@@ -90,10 +120,10 @@ function runModalConfirmWithSubmit(text, formTarget, options) {
 /**
  * Resets the error state and disables buttons and inputs.
  */
-const resetError = () => {
+const resetError = (element) => {
     $("button,input").attr("disabled", true);
-    $(".error-wrapper").empty();
-    $("input").removeClass("is-invalid");
+    element.find(".error-wrapper").empty();
+    element.find("input").removeClass("is-invalid");
 };
 
 /**
@@ -108,11 +138,11 @@ const enableInputs = () => {
  * @param {Object} xhrData - The data received from the XMLHttpRequest.
  * @param {Object} xhrData.errors - The error object containing field names and error messages.
  */
-const showTheFormError = (xhrData) => {
+const showTheFormError = (xhrData, element) => {
     const errors = xhrData.errors;
 
     $.each(errors, function (key, value) {
-        let els = $(`input[name="${key}"]`);
+        let els = element.find(`input[name="${key}"]`);
 
         els.addClass("is-invalid");
         els.parent()
@@ -137,10 +167,17 @@ function disableHashbangLink() {
 
 /**
  * Initializes form autosubmit AJAX.
+ *
+ * @param {string} target Target element in the form of ID or class
  */
-function initFormAjax() {
+function initFormAjax(
+    target,
+    successCallback,
+    errorCallback,
+    onCompleteCallback
+) {
     $(document).ready(function () {
-        $("form").submit(function (event) {
+        $(target).submit(function (event) {
             event.preventDefault();
             var form = $(this);
             if (form) {
@@ -154,63 +191,85 @@ function initFormAjax() {
                             "X-Requested-With",
                             "XMLHttpRequest"
                         );
-                        swalToast("info", "Mengirim");
-                        resetError();
+                        toastrToast("info", "Mengirim");
+                        resetError(form);
                     },
-                    success: function (response, status, xhr) {
-                        if (
-                            xhr.status === 200 &&
-                            form.data("redirect-on-success")
-                        ) {
-                            swalToast(
-                                "success",
-                                "Berhasil!",
-                                form.data("success-message") ??
-                                    "Telah berhasil dilakukan!"
-                            );
+                    success(response, status, xhr) {
+                        if (successCallback) {
+                            successCallback(response, status, xhr);
+                        } else {
+                            if (
+                                xhr.status === 200 &&
+                                form.data("redirect-on-success")
+                            ) {
+                                toastrToast(
+                                    "success",
+                                    "Berhasil!",
+                                    form.data("success-message") ??
+                                        "Telah berhasil dilakukan!"
+                                );
 
-                            setTimeout(function () {
-                                window.location.href =
-                                    form.data("redirect-on-success") ?? "";
-                            }, 5000);
-                        }
+                                setTimeout(function () {
+                                    window.location.href =
+                                        form.data("redirect-on-success") ?? "";
+                                }, 5000);
+                            }
 
-                        if (xhr.status === 200 && form.data("reload-table")) {
-                            var tableId = form.data("target");
-                            $(`${tableId}`).DataTable().ajax.reload();
+                            if (
+                                xhr.status === 200 &&
+                                form.data("reload-table")
+                            ) {
+                                var tableId = form.data("target");
+                                $(`${tableId}`).DataTable().ajax.reload();
 
-                            swalToast(
-                                "success",
-                                "Berhasil!",
-                                form.data("success-message") ??
-                                    "Telah berhasil dilakukan!"
-                            );
+                                toastrToast(
+                                    "success",
+                                    "Berhasil!",
+                                    form.data("success-message") ??
+                                        "Telah berhasil dilakukan!"
+                                );
+                            }
                         }
                     },
-                    error: function (xhr, status, error) {
+                    error(xhr, status, error) {
                         enableInputs();
 
-                        if (xhr.status === 422) {
-                            showTheFormError(xhr.responseJSON);
-                            swalToast(
-                                "error",
-                                "Ada Sedikit Kesalahan!",
-                                "Mohon periksa kembali inputan yang tidak sesuai!"
-                            );
+                        if (errorCallback) {
+                            errorCallback(xhr, status, error);
+                        } else {
+                            if (xhr.status === 422) {
+                                showTheFormError(xhr.responseJSON, form);
+                                toastrToast(
+                                    "error",
+                                    "Ada Sedikit Kesalahan!",
+                                    "Mohon periksa kembali inputan yang tidak sesuai!"
+                                );
+                            } else {
+                                toastrToast(
+                                    "error",
+                                    "Ada Sedikit Kesalahan!",
+                                    "Ada sedikit kesalahan di server. Coba lagi beberapa menit."
+                                );
+                            }
+                        }
+                    },
+                    complete() {
+                        if (onCompleteCallback) {
+                            onCompleteCallback();
                         }
                     },
                 });
             }
         });
     });
-}
+};
 
 /**
  * Initializes all functions.
  */
 function initAll() {
-    initFormAjax();
+    initFormAjax(".form-ajax");
     disableHashbangLink();
-}
+};
 
 initAll();
