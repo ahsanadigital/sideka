@@ -191,7 +191,7 @@ function initFormAjax(
                             "X-Requested-With",
                             "XMLHttpRequest"
                         );
-                        toastrToast("info", "Mengirim");
+                        toastrToast("info", "Sedang memproses...");
                         resetError(form);
                     },
                     success(response, status, xhr) {

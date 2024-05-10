@@ -16,7 +16,7 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('dist/images/logos/favicon.ico') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/extra-libs/toastr/toastr.min.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Owl Carousel -->
     <link rel="stylesheet" href="{{ asset('dist/libs/owl.carousel/dist/assets/owl.carousel.min.c') }}ss">
     <!-- Core Css -->
@@ -67,12 +67,13 @@
     <script src="{{ asset('dist/js/app.horizontal.init.js') }}"></script>
     <script src="{{ asset('dist/js/app-style-switcher.js') }}"></script>
     <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
-
     <script src="{{ asset('dist/js/custom.js') }}"></script>
     <!-- current page js files -->
     <script src="{{ asset('dist/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('assets/extra-libs/toastr/toastr.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @yield('scripts')
 
+    @yield('script')
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
     @include('components.scripts.submitform')
 </body>

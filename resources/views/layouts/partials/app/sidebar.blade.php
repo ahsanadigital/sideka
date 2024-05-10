@@ -42,6 +42,24 @@
         </a>
     </li>
 
+    <li class="sidebar-item {{ request()->routeIs('letter.*') ? 'active' : '' }}">
+        <a class="sidebar-link" href="{{ route('letter.index') }}" aria-expanded="false">
+            <span>
+                <i class="ti ti-file"></i>
+            </span>
+            <span class="hide-menu">Surat-Menyurat</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {{ request()->routeIs('council.*') ? 'active' : '' }}">
+        <a class="sidebar-link" href="{{ route('council.index') }}" aria-expanded="false">
+            <span>
+                <i class="ti ti-building"></i>
+            </span>
+            <span class="hide-menu">Kwartir</span>
+        </a>
+    </li>
+
     <!-- ============================= -->
     <!-- Manajemen Dewan Kerja -->
     <!-- ============================= -->
@@ -50,16 +68,16 @@
         <span class="hide-menu">Manajemen Dewan Kerja</span>
     </li>
 
-    <li class="sidebar-item">
+    <li class="sidebar-item {{ request()->routeIs('event-*') ? 'active' : '' }}">
         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
             <span class="d-flex">
                 <i class="ti ti-run"></i>
             </span>
             <span class="hide-menu">Kegiatan</span>
         </a>
-        <ul aria-expanded="false" class="collapse first-level">
+        <ul aria-expanded="false" class="collapse {{ request()->routeIs('event-*') ? 'in' : '' }} first-level">
             <li class="sidebar-item">
-                <a href="../main/eco-shop.html" class="sidebar-link">
+                <a href="{{ route('event-report.index') }}" class="sidebar-link">
                     <div class="round-16 d-flex align-items-center justify-content-center">
                         <i class="ti ti-circle"></i>
                     </div>
@@ -67,7 +85,7 @@
                 </a>
             </li>
             <li class="sidebar-item">
-                <a href="../main/eco-shop-detail.html" class="sidebar-link">
+                <a href="{{ route('event-agenda.index') }}" class="sidebar-link">
                     <div class="round-16 d-flex align-items-center justify-content-center">
                         <i class="ti ti-circle"></i>
                     </div>

@@ -24,4 +24,8 @@ Route::prefix('/panel')->group(function() {
     Route::resource('member', App\Http\Controllers\MemberController::class)->only('index');
     Route::resource('meeting', App\Http\Controllers\MeetingController::class)->only('index');
     Route::resource('achievement', App\Http\Controllers\AchievementController::class)->only('index');
+    Route::resource('letter', App\Http\Controllers\LetterController::class)->only('index');
+    Route::resource('council', App\Http\Controllers\CouncilController::class)->only('index');
+    Route::resource('event-report', App\Http\Controllers\EventReportController::class)->only('index');
+    Route::resource('event-agenda', App\Http\Controllers\EventAgendaController::class)->only('index');
 });
