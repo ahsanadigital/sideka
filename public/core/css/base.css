@@ -1,0 +1,36 @@
+.file-upload-container label {
+    position: relative;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border: 2px dashed rgba(var(--bs-primary-rgb), .125);
+    border-radius: .5rem;
+    background: var(--bs-light);
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.file-upload-container label:hover,
+.file-upload-container label.active {
+    border-color: rgba(var(--bs-primary-rgb), .5);
+}
+
+.file-upload-container label .file-hidden {
+    display: none;
+}
+
+.file-upload-container label .file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.file-upload-container label .file-upload-label i {
+    font-size: 2rem;
+}

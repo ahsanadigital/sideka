@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('end_to')->nullable();
             $table->string('file')->nullable();
             $table->foreignId('users_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('public')->default(1);
         });
     }
 

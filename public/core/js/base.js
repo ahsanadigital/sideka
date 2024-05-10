@@ -24,6 +24,128 @@ function swalNotify(title, text, icon, timer) {
 }
 
 /**
+ * Converts a file size from bytes to a human-readable format.
+ *
+ * @param {number} bytes - The file size in bytes.
+ * @returns {string} The human-readable file size.
+ */
+function humanReadableSize(bytes) {
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "0 Byte";
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
+};
+
+/**
+ * Initializes the file upload functionality.
+ * @param {string} targetElement - The selector of the target element.
+ */
+function initFormInput(targetElement) {
+    const fileInput = $(targetElement).find("#file");
+    const fileList = $(targetElement).find(".file-list");
+    const acceptAttribute = fileInput.attr("accept");
+    const maxFileSize = parseInt(fileInput.data("max-filesize")) || null;
+
+    // Function to remove a file from the list
+    function removeFile(fileName) {
+        const input = fileInput[0];
+        const files = input.files;
+        const remainingFiles = Array.from(files).filter(file => file.name !== fileName);
+
+        const newFileList = new DataTransfer();
+        remainingFiles.forEach(file => newFileList.items.add(file));
+
+        input.files = newFileList.files;
+        fileList.find(`[data-file-name="${fileName}"]`).remove();
+
+        hideFileListIfEmpty(remainingFiles);
+    };
+
+    // Function to hide file list if empty
+    function hideFileListIfEmpty(files) {
+        if (files.length === 0) {
+            fileList.addClass("d-none");
+        }
+    };
+
+    // Function to validate file type based on accept attribute
+    function validateFileType(file) {
+        if (!acceptAttribute) {
+            return true; // No accept attribute specified
+        }
+        const acceptedTypes = acceptAttribute.split(",");
+        return acceptedTypes.some((type) => type.trim() === file.type);
+    };
+
+    // Function to validate file size based on max-filesize attribute
+    function validateFileSize(file) {
+        if (!maxFileSize) {
+            return true; // No max-filesize attribute specified
+        }
+        return file.size <= maxFileSize;
+    };
+
+    // Event listener for file removal
+    fileList.on("click", ".file-remove", function () {
+        const fileName = $(this).closest("li").attr("data-file-name");
+        removeFile(fileName);
+    });
+
+    // Event listener for file reset
+    $(targetElement)
+        .find(".file-upload-label")
+        .on("click", ".file-reset", function () {
+            fileInput.val("");
+            fileList.empty().addClass("d-none");
+        });
+
+    // Event listener for file input change
+    fileInput.on("change", function () {
+        fileList.empty();
+        const files = Array.from(fileInput.get(0).files);
+        fileList.removeClass("d-none").addClass('pt-3 mb-0');
+        hideFileListIfEmpty(files);
+        files.forEach((file) => {
+            if (!validateFileType(file)) {
+                toastrToast(
+                    'error',
+                    'Kesalahan!',
+                    `Maaf, unggah sesuai dengan tipe berkasnya, yakni: ${acceptAttribute}`
+                );
+                fileList.removeClass("pt-3 mb-0").addClass('d-none');
+                return;
+            }
+            if (!validateFileSize(file)) {
+                toastrToast(
+                    'error',
+                    'Kesalahan!',
+                    `Berkas yang anda unggah melebihi ketentuan, yakni ${humanReadableSize(maxFileSize)}.`
+                );
+                fileList.removeClass("pt-3 mb-0").addClass('d-none');
+                return;
+            }
+            const listItem = $(
+                `<li class="list-group-item d-flex px-0 gap-2 justify-content-between"></li>`
+            );
+            listItem
+                .html(
+                    `
+            <div class="d-flex gap-1 flex-column w-75">
+                <div class="fw-bolder text-truncate">${file.name}</div>
+                <div>${humanReadableSize(file.size)}</div>
+            </div>
+                <button class="file-remove btn btn-danger" type="button" aria-label="Hapus berkas">
+                    <i class="ti ti-trash"></i>
+                </button>
+            `
+                )
+                .attr("data-file-name", file.name);
+            fileList.append(listItem);
+        });
+    });
+};
+
+/**
  * Displays a SweetAlert2 toast notification with the provided options.
  *
  * @param {string} icon - The icon type to be displayed (e.g., 'success', 'error', 'warning', 'info').
@@ -145,7 +267,7 @@ const showTheFormError = (xhrData, element) => {
         let els = element.find(`input[name="${key}"]`);
 
         els.addClass("is-invalid");
-        els.parent()
+        els.parents(".form-group")
             .find(".error-wrapper")
             .html(`<div class="text-danger">${value[0]}</div>`);
     });
@@ -262,7 +384,7 @@ function initFormAjax(
             }
         });
     });
-};
+}
 
 /**
  * Initializes all functions.
@@ -270,6 +392,6 @@ function initFormAjax(
 function initAll() {
     initFormAjax(".form-ajax");
     disableHashbangLink();
-};
+}
 
 initAll();

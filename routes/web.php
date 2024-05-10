@@ -17,7 +17,7 @@ Route::get('/', fn() => view('welcome'));
 
 Auth::routes(['register' => false]);
 
-Route::prefix('/panel')->group(function() {
+Route::prefix('/panel')->middleware('auth')->group(function() {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::resource('decree', App\Http\Controllers\DecreeController::class)->only('index');

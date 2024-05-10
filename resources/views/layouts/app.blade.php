@@ -18,10 +18,13 @@
     <!-- Owl Carousel  -->
     <link rel="stylesheet" href="{{ asset('dist/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @yield('links')
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('assets/extra-libs/tabler-icon/tabler-icons.min.css') }}" />
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
+    <link id="themeColors" rel="stylesheet" href="{{ asset('core/css/base.css') }}" />
+    @yield('styles')
 </head>
 
 <body>
@@ -283,9 +286,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @yield('scripts')
 
-    @yield('script')
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
     @include('components.scripts.submitform')
+    @yield('script')
 </body>
 
 </html>
