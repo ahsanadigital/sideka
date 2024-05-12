@@ -19,8 +19,10 @@ class UserSeeder extends Seeder
             'email' => 'admin@dkdjatim.or.id',
             'password' => 'password@dkdjatim2024'
         ]);
-
-        User::factory(20)->assignRole(RoleUserEnum::DKC->value)->create();
-        User::factory(20)->assignRole(RoleUserEnum::DKR->value)->create();
+        User::factory()->assignRole(RoleUserEnum::DKC->value)->create([
+            'fullname' => 'DKC Ngawi',
+            'email' => 'admin@pramuka.ngawikab.go.id',
+            'password' => 'pramuka@kartonyono2024'
+        ]);
     }
 }

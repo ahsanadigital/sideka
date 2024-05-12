@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DecreeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +18,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('decree', DecreeController::class);
+Route::apiResource('decree', App\Http\Controllers\DecreeController::class);
+Route::apiResource('user', App\Http\Controllers\UserController::class);

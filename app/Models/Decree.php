@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Services\FileService;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -41,6 +42,10 @@ class Decree extends Model
 {
     use HasFactory, HasUuid;
 
+    protected $hidden = [
+        'users_id',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,9 +56,10 @@ class Decree extends Model
         'number',
         'nomenclature',
         'start_from',
-        'end_from',
-        'file',
+        'end_to',
+        'document',
         'users_id',
+        'public',
     ];
 
     /**
@@ -73,6 +79,16 @@ class Decree extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
+
+    /**
+     * Get decree pdf file informatin
+     *
+     * @return array
+     */
+    public function getFileInformation(): array
+    {
+        return FileService::getFileInformation($this->getAttribute('document'));
     }
 }

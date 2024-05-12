@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn() => view('welcome'));
+Route::get('/', fn () => view('welcome'));
 
 Auth::routes(['register' => false]);
 
-Route::prefix('/panel')->middleware('auth')->group(function() {
+Route::prefix('/panel')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::resource('decree', App\Http\Controllers\DecreeController::class)->only('index');
@@ -28,4 +28,9 @@ Route::prefix('/panel')->middleware('auth')->group(function() {
     Route::resource('council', App\Http\Controllers\CouncilController::class)->only('index');
     Route::resource('event-report', App\Http\Controllers\EventReportController::class)->only('index');
     Route::resource('event-agenda', App\Http\Controllers\EventAgendaController::class)->only('index');
+    Route::resource('user', App\Http\Controllers\UserController::class)->only('index');
+});
+
+Route::controller(App\Http\Controllers\UtilsController::class)->prefix('util')->name('utils.')->group(function () {
+    Route::any('download-file', 'downloadFile')->name('download-file');
 });

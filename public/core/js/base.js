@@ -24,6 +24,77 @@ function swalNotify(title, text, icon, timer) {
 }
 
 /**
+ * Converts an array to an encoded URL string.
+ * @param {Object} array - The input array.
+ * @returns {string} The encoded URL string.
+ */
+function encodeArrayToURL(array) {
+    return Object.entries(array)
+        .map(
+            ([key, value]) =>
+                `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+}
+
+/**
+ * Initialize DataTable with AJAX.
+ *
+ * @param {string} tableId - The ID of the table to initialize DataTable.
+ * @param {string} url - The URL endpoint to fetch data from.
+ * @param {Array} columns - The configuration of table columns.
+ */
+function initializeDataTableWithAjax(tableId, url, columns, method = "GET") {
+    $(document).ready(function () {
+        $(`#${tableId}`).DataTable({
+            columnDefs: [{ targets: "no-sort", orderable: false }],
+            dom:
+                "<'dt--top-section px-3 pt-3 pb-2'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+                "<'table-responsive w-100'tr>" +
+                "<'dt--bottom-section px-3 pt-3 pb-2 d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            processing: true,
+            responsive: true,
+            serverSide: true,
+            ajax: {
+                url,
+                method,
+            },
+            fixedHeader: {
+                header: true,
+                footer: true,
+            },
+
+            language: {
+                lengthMenu: "Menampilkan _MENU_ data per halaman",
+                zeroRecords: "Maaf, data tidak tersedia!",
+                info: "Menampilkan _PAGE_ dari _PAGES_",
+                infoEmpty: "Tidak ada data yang tersedia.",
+                infoFiltered: "(Disaring dari _MAX_ jumlah data)",
+            },
+            columns: columns,
+        });
+    });
+}
+
+/**
+ * Checks if the input is booleanish.
+ *
+ * @param {any} input The input value to be checked.
+ * @returns {boolean} True if the input is booleanish, false otherwise.
+ */
+const isBooleanish = (input) =>
+    typeof input === "boolean" || /^(true|false)$/i.test(input);
+
+/**
+ * Converts a string to a boolean value.
+ *
+ * @param {string} input The input string to be converted.
+ * @returns {boolean} The boolean value derived from the input string.
+ */
+const booleanish = (input) =>
+    /^(true|false)$/i.test(input) ? input.toLowerCase() === "true" : false;
+
+/**
  * Converts a file size from bytes to a human-readable format.
  *
  * @param {number} bytes - The file size in bytes.
@@ -34,14 +105,14 @@ function humanReadableSize(bytes) {
     if (bytes === 0) return "0 Byte";
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
-};
+}
 
 /**
  * Initializes the file upload functionality.
  * @param {string} targetElement - The selector of the target element.
  */
-function initFormInput(targetElement) {
-    const fileInput = $(targetElement).find("#file");
+function initFormUpload(targetElement) {
+    const fileInput = $(targetElement).find("input[type=file]");
     const fileList = $(targetElement).find(".file-list");
     const acceptAttribute = fileInput.attr("accept");
     const maxFileSize = parseInt(fileInput.data("max-filesize")) || null;
@@ -50,23 +121,25 @@ function initFormInput(targetElement) {
     function removeFile(fileName) {
         const input = fileInput[0];
         const files = input.files;
-        const remainingFiles = Array.from(files).filter(file => file.name !== fileName);
+        const remainingFiles = Array.from(files).filter(
+            (file) => file.name !== fileName
+        );
 
         const newFileList = new DataTransfer();
-        remainingFiles.forEach(file => newFileList.items.add(file));
+        remainingFiles.forEach((file) => newFileList.items.add(file));
 
         input.files = newFileList.files;
         fileList.find(`[data-file-name="${fileName}"]`).remove();
 
         hideFileListIfEmpty(remainingFiles);
-    };
+    }
 
     // Function to hide file list if empty
     function hideFileListIfEmpty(files) {
         if (files.length === 0) {
             fileList.addClass("d-none");
         }
-    };
+    }
 
     // Function to validate file type based on accept attribute
     function validateFileType(file) {
@@ -75,7 +148,7 @@ function initFormInput(targetElement) {
         }
         const acceptedTypes = acceptAttribute.split(",");
         return acceptedTypes.some((type) => type.trim() === file.type);
-    };
+    }
 
     // Function to validate file size based on max-filesize attribute
     function validateFileSize(file) {
@@ -83,7 +156,7 @@ function initFormInput(targetElement) {
             return true; // No max-filesize attribute specified
         }
         return file.size <= maxFileSize;
-    };
+    }
 
     // Event listener for file removal
     fileList.on("click", ".file-remove", function () {
@@ -103,25 +176,27 @@ function initFormInput(targetElement) {
     fileInput.on("change", function () {
         fileList.empty();
         const files = Array.from(fileInput.get(0).files);
-        fileList.removeClass("d-none").addClass('pt-3 mb-0');
+        fileList.removeClass("d-none").addClass("pt-3 mb-0");
         hideFileListIfEmpty(files);
         files.forEach((file) => {
             if (!validateFileType(file)) {
                 toastrToast(
-                    'error',
-                    'Kesalahan!',
+                    "error",
+                    "Kesalahan!",
                     `Maaf, unggah sesuai dengan tipe berkasnya, yakni: ${acceptAttribute}`
                 );
-                fileList.removeClass("pt-3 mb-0").addClass('d-none');
+                fileList.removeClass("pt-3 mb-0").addClass("d-none");
                 return;
             }
             if (!validateFileSize(file)) {
                 toastrToast(
-                    'error',
-                    'Kesalahan!',
-                    `Berkas yang anda unggah melebihi ketentuan, yakni ${humanReadableSize(maxFileSize)}.`
+                    "error",
+                    "Kesalahan!",
+                    `Berkas yang anda unggah melebihi ketentuan, yakni ${humanReadableSize(
+                        maxFileSize
+                    )}.`
                 );
-                fileList.removeClass("pt-3 mb-0").addClass('d-none');
+                fileList.removeClass("pt-3 mb-0").addClass("d-none");
                 return;
             }
             const listItem = $(
@@ -143,7 +218,25 @@ function initFormInput(targetElement) {
             fileList.append(listItem);
         });
     });
-};
+
+    // Event listener for drag and drop
+    $(targetElement).on("dragover", function (e) {
+        e.preventDefault();
+        $(this).find("label").addClass("active");
+    });
+
+    $(targetElement).on("dragleave", function () {
+        $(this).find("label").removeClass("active");
+    });
+
+    $(targetElement).on("drop", function (e) {
+        e.preventDefault();
+        $(this).find("label").removeClass("active");
+        const files = e.originalEvent.dataTransfer.files;
+        fileInput.prop("files", files);
+        fileInput.trigger("change");
+    });
+}
 
 /**
  * Displays a SweetAlert2 toast notification with the provided options.
@@ -240,10 +333,20 @@ function runModalConfirmWithSubmit(text, formTarget, options) {
 }
 
 /**
+ * Submit targetted form
+ *
+ * @param {string} formTarget
+ * @returns void
+ */
+function submitForm(formTarget) {
+    $(formTarget).submit();
+}
+
+/**
  * Resets the error state and disables buttons and inputs.
  */
 const resetError = (element) => {
-    $("button,input").attr("disabled", true);
+    $("button,input,textarea").attr("disabled", true);
     element.find(".error-wrapper").empty();
     element.find("input").removeClass("is-invalid");
 };
@@ -252,7 +355,7 @@ const resetError = (element) => {
  * Enables all inputs.
  */
 const enableInputs = () => {
-    $("button,input").removeAttr("disabled");
+    $("button,input,textarea").removeAttr("disabled");
 };
 
 /**
@@ -264,7 +367,9 @@ const showTheFormError = (xhrData, element) => {
     const errors = xhrData.errors;
 
     $.each(errors, function (key, value) {
-        let els = element.find(`input[name="${key}"]`);
+        let els = element.find(
+            `input[name="${key}"],select[name="${key}"],textarea[name="${key}"]`
+        );
 
         els.addClass("is-invalid");
         els.parents(".form-group")
@@ -288,27 +393,194 @@ function disableHashbangLink() {
 }
 
 /**
+ * Initialize ajax with callbacks for different stages of AJAX request
+ *
+ * @param {*} data Payload for the AJAX request
+ * @param {string} url Target URL for the AJAX request
+ * @param {string} method HTTP method for the AJAX request
+ * @param {function} beforeSend Callback function to be executed before sending the AJAX request
+ * @param {function} success Callback function to be executed upon successful completion of the AJAX request
+ * @param {function} error Callback function to be executed if an error occurs during the AJAX request
+ * @param {function} complete Callback function to be executed after the AJAX request is completed, regardless of success or failure
+ * @returns {void}
+ */
+function initAjax(data, url, method, beforeSend, success, error, complete) {
+    $.ajax({
+        url,
+        method,
+        processData: false,
+        contentType: false,
+        data,
+        beforeSend,
+        success,
+        error,
+        complete,
+    });
+}
+
+/**
+ * Initializes a PDF viewer in the specified container.
+ * @param {string} pdfUrl - The URL of the PDF file.
+ * @param {string} containerId - The ID of the container element where the PDF will be displayed.
+ * @param {number} [pageInit=1] - The current initialize page
+ */
+function initPDFViewer(pdfUrl, containerId, pageInit = 1) {
+    if (typeof pdfjsLib === "undefined") return;
+
+    let pdfDoc = null,
+        totalPageNum = 1,
+        pageRendering = false,
+        pageNumPending = null;
+
+    const canvas = $("<canvas />").get(0),
+        target = $(`#${containerId}`),
+        scale = 1.0,
+        ctx = canvas.getContext("2d");
+
+    /**
+     * Render the pagination element
+     */
+    function renderPagination() {
+        const wrapper = $(
+                `<div class="d-flex p-3 align-items-center justify-content-between" />`
+            ),
+            prevButton = $(
+                `<button class="btn btn-primary" id="prev-paginate"><i class="ti ti-arrow-left"></i></button>`
+            ).click(goToPreviousPage),
+            counterPage = $(`<span>${pageInit} / ${totalPageNum}</span>`),
+            nextButton = $(
+                `<button class="btn btn-primary"><i class="ti ti-arrow-right"></i></button>`
+            ).click(goToNextPage);
+
+        prevButton
+            .prop("disabled", pageInit === 1)
+            .addClass(pageInit === 1 ? "btn-light" : "btn-primary")
+            .removeClass(pageInit !== 1 ? "btn-light" : "btn-primary");
+        nextButton
+            .prop("disabled", pageInit === totalPageNum)
+            .addClass(pageInit === totalPageNum ? "btn-light" : "btn-primary")
+            .removeClass(
+                pageInit !== totalPageNum ? "btn-light" : "btn-primary"
+            );
+
+        return wrapper.append(prevButton, counterPage, nextButton);
+    }
+
+    const renderPage = (num) => {
+        pageRendering = true;
+
+        pdfDoc
+            .getPage(num)
+            .then((page) => {
+                const pageViewport = page.getViewport({
+                    scale,
+                });
+                canvas.height = pageViewport.height;
+                canvas.width = pageViewport.width;
+
+                canvas.style.width = "100%";
+                canvas.style.height = "100%";
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: pageViewport,
+                };
+                const renderTask = page.render(renderContext);
+
+                let wrapperBag = $(
+                        '<div class="pdf-loader bg-light rounded-3 border-light border" />'
+                    ),
+                    headerSection = $(
+                        `<div class="p-3 d-flex align-items-center justify-content-between" />`
+                    ).append(
+                        $("<strong>Pratinjau PDF</strong>"),
+                        $(
+                            '<small>Didukung oleh <a href="https://mozilla.github.io/pdf.js/">PDF.js</a></small>'
+                        )
+                    ),
+                    renderElPagination = renderPagination();
+
+                wrapperBag.append(headerSection, canvas, renderElPagination);
+
+                target.html(wrapperBag);
+
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            })
+            .catch(function (error) {
+                console.error("Error loading PDF: " + error);
+            });
+    };
+
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finished. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+
+    function goToPreviousPage() {
+        if (pageInit > 1) {
+            pageInit--;
+            queueRenderPage(pageInit);
+        }
+    }
+
+    function goToNextPage() {
+        if (pageInit < pdfDoc.numPages) {
+            pageInit++;
+            queueRenderPage(pageInit);
+        }
+    }
+
+    /**
+     * Asynchronously downloads PDF.
+     */
+    (function () {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js";
+
+        pdfjsLib.getDocument(pdfUrl).promise.then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            totalPageNum = pdfDoc.numPages;
+
+            // Initial/first page rendering
+            renderPage(pageInit);
+        });
+    })();
+}
+
+/**
  * Initializes form autosubmit AJAX.
  *
  * @param {string} target Target element in the form of ID or class
+ * @param {*} onError Handling the error callback
+ * @param {*} onFinish Handling on finish callback
+ * @param {*} onSuccess Handling for success callback
+ * @returns void
  */
-function initFormAjax(
-    target,
-    successCallback,
-    errorCallback,
-    onCompleteCallback
-) {
+function initFormAjax(target, onSuccess, onError, onFinish) {
     $(document).ready(function () {
-        $(target).submit(function (event) {
+        $('body').on('submit', target, function (event) {
             event.preventDefault();
             var form = $(this);
-            if (form) {
-                $.ajax({
-                    url: form.attr("action"),
-                    type: form.attr("method"),
-                    data: form.serialize(),
 
-                    beforeSend: function (xhr) {
+            if (form) {
+                initAjax(
+                    new FormData(form[0]),
+                    form.attr("action"),
+                    form.attr("method"),
+                    function (xhr) {
                         xhr.setRequestHeader(
                             "X-Requested-With",
                             "XMLHttpRequest"
@@ -316,71 +588,93 @@ function initFormAjax(
                         toastrToast("info", "Sedang memproses...");
                         resetError(form);
                     },
-                    success(response, status, xhr) {
-                        if (successCallback) {
-                            successCallback(response, status, xhr);
-                        } else {
-                            if (
-                                xhr.status === 200 &&
-                                form.data("redirect-on-success")
-                            ) {
-                                toastrToast(
-                                    "success",
-                                    "Berhasil!",
-                                    form.data("success-message") ??
-                                        "Telah berhasil dilakukan!"
-                                );
+                    function (response, status, xhr) {
+                        if (onSuccess) {
+                            onSuccess(response, status, xhr);
+                        }
 
-                                setTimeout(function () {
-                                    window.location.href =
-                                        form.data("redirect-on-success") ?? "";
-                                }, 5000);
-                            }
+                        if (
+                            xhr.status === 200 &&
+                            form.data("redirect-on-success")
+                        ) {
+                            toastrToast(
+                                "success",
+                                "Berhasil!",
+                                form.data("success-message") ??
+                                    "Telah berhasil dilakukan!"
+                            );
 
-                            if (
-                                xhr.status === 200 &&
-                                form.data("reload-table")
-                            ) {
-                                var tableId = form.data("target");
-                                $(`${tableId}`).DataTable().ajax.reload();
+                            setTimeout(function () {
+                                window.location.href =
+                                    form.data("redirect-on-success") ?? "";
+                            }, 5000);
+                        }
 
-                                toastrToast(
-                                    "success",
-                                    "Berhasil!",
-                                    form.data("success-message") ??
-                                        "Telah berhasil dilakukan!"
-                                );
-                            }
+                        if (xhr.status === 200 && form.data("reload-table")) {
+                            var tableId = form.data("target");
+                            new $.fn.dataTable.Api(`${tableId}`).ajax.reload();
+
+                            toastrToast(
+                                "success",
+                                "Berhasil!",
+                                form.data("success-message") ??
+                                    "Telah berhasil dilakukan!"
+                            );
+                        }
+
+                        if (
+                            xhr.status === 200 &&
+                            form.data("reset-form") === true
+                        ) {
+                            form[0].reset();
+                            enableInputs();
+
+                            form.parents(".modal").modal("hide");
+                            form.find(".file-upload-container .file-list")
+                                .addClass("d-none")
+                                .html();
+
+                            form.find(".datepicker")?.datepicker("update", "");
+                            form.find("select.select2")
+                                ?.empty()
+                                .trigger("change");
+
+                            toastrToast(
+                                "success",
+                                "Berhasil!",
+                                form.data("success-message") ??
+                                    "Telah berhasil dilakukan!"
+                            );
                         }
                     },
-                    error(xhr, status, error) {
+                    function (xhr, status, error) {
                         enableInputs();
 
-                        if (errorCallback) {
-                            errorCallback(xhr, status, error);
+                        if (onError) {
+                            onError(xhr, status, error);
+                        }
+
+                        if (xhr.status === 422) {
+                            showTheFormError(xhr.responseJSON, form);
+                            toastrToast(
+                                "error",
+                                "Ada Sedikit Kesalahan!",
+                                "Mohon periksa kembali inputan yang tidak sesuai!"
+                            );
                         } else {
-                            if (xhr.status === 422) {
-                                showTheFormError(xhr.responseJSON, form);
-                                toastrToast(
-                                    "error",
-                                    "Ada Sedikit Kesalahan!",
-                                    "Mohon periksa kembali inputan yang tidak sesuai!"
-                                );
-                            } else {
-                                toastrToast(
-                                    "error",
-                                    "Ada Sedikit Kesalahan!",
-                                    "Ada sedikit kesalahan di server. Coba lagi beberapa menit."
-                                );
-                            }
+                            toastrToast(
+                                "error",
+                                "Ada Sedikit Kesalahan!",
+                                "Ada sedikit kesalahan di server. Coba lagi beberapa menit."
+                            );
                         }
                     },
-                    complete() {
-                        if (onCompleteCallback) {
-                            onCompleteCallback();
+                    function (a, b, c) {
+                        if (onFinish) {
+                            onFinish(a, b, c);
                         }
-                    },
-                });
+                    }
+                );
             }
         });
     });
@@ -390,6 +684,7 @@ function initFormAjax(
  * Initializes all functions.
  */
 function initAll() {
+    initFormUpload(".file-upload-container");
     initFormAjax(".form-ajax");
     disableHashbangLink();
 }

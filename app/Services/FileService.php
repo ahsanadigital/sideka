@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class for handling upload, update and delete file from eloquent
@@ -15,7 +17,19 @@ use Illuminate\Support\Facades\Storage;
 class FileService
 {
     public function __construct()
-    {}
+    {
+    }
+
+    /**
+     * Check if the file is exists
+     *
+     * @param string $file The path of file
+     * @return boolean
+     */
+    public static function exists(string $file): bool
+    {
+        return Storage::disk('public')->exists($file);
+    }
 
     /**
      * Removes a file from the storage.
@@ -25,7 +39,7 @@ class FileService
      */
     public static function remove(string $file): void
     {
-        if (Storage::disk('public')->exists("{$file}")) {
+        if (self::exists($file)) {
             Storage::disk('public')->delete($file);
         }
     }
@@ -39,13 +53,27 @@ class FileService
      */
     public static function upload(Request $request, string $uploadPath = 'temp'): string
     {
-        if($request->file('image')) {
+        if ($request->file('image')) {
             $path = $request->file('image')->store($uploadPath, "public");
-        } elseif($request->file('document')) {
+        } elseif ($request->file('document')) {
             $path = $request->file('document')->store($uploadPath, "public");
         }
 
         return $path;
+    }
+
+    /**
+     * Downloads a file with the desired name from the specified path.
+     *
+     * @param string $filePath The path to the file to be downloaded.
+     * @param string $desiredName The desired name for the downloaded file.
+     * @return Response|BinaryFileResponse
+     */
+    public static function download(string $filePath, string $desiredName): BinaryFileResponse
+    {
+        $file = Storage::disk('public')->path($filePath);
+
+        return response()->download($file, $desiredName);
     }
 
     /**
@@ -60,5 +88,27 @@ class FileService
     {
         self::remove($filePath);
         return self::upload($request, $uploadPath);
+    }
+    /**
+     * Retrieves information about a file.
+     *
+     * @param string $filePath The path to the file.
+     * @return array|null An associative array containing file information, or null if the file does not exist.
+     */
+    public static function getFileInformation(string $filePath): ?array
+    {
+        if (self::exists($filePath)) {
+            return [
+                'fullpath' => $filePath,
+                'fullurl' => Storage::disk('public')->url($filePath),
+                'filename' => pathinfo($filePath, PATHINFO_FILENAME),
+                'mimetype' => Storage::disk('public')->mimeType($filePath),
+                'size' => Storage::disk('public')->size($filePath),
+                'created_at' => Storage::disk('public')->lastModified($filePath),
+                'modified_at' => Storage::disk('public')->lastModified($filePath),
+            ];
+        }
+
+        return null;
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('nomenclature')->nullable();
             $table->dateTime('start_from')->nullable()->useCurrent()->useCurrentOnUpdate();
             $table->dateTime('end_to')->nullable();
-            $table->string('file')->nullable();
+            $table->string('document')->nullable();
             $table->foreignId('users_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('public')->default(1);
         });

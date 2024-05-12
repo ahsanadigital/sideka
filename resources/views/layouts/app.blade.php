@@ -3,7 +3,7 @@
 
 <head>
     <!--  Title -->
-    <title>Mordenize</title>
+    <title>{{ config('app.name') }}</title>
     <!--  Required Meta Tag -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,17 +14,22 @@
     <meta name="keywords" content="Mordenize" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--  Favicon -->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('dist/images/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" type="image/ico" href="{{ asset('favicon.ico') }}" />
     <!-- Owl Carousel  -->
     <link rel="stylesheet" href="{{ asset('dist/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    @yield('links')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+        integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @stack('links')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('assets/extra-libs/tabler-icon/tabler-icons.min.css') }}" />
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
-    <link id="themeColors" rel="stylesheet" href="{{ asset('core/css/base.css') }}" />
-    @yield('styles')
+    <link rel="stylesheet" href="{{ asset('core/css/base.css') }}" />
+    @stack('styles')
 </head>
 
 <body>
@@ -47,8 +52,8 @@
                     <a href="{{ route('home') }}" class="text-nowrap logo-img">
                         <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" class="dark-logo" width="180"
                             alt="" />
-                        <img src="{{ asset('core/images/brands/svg/logo-white.svg') }}" class="light-logo" width="180"
-                            alt="" />
+                        <img src="{{ asset('core/images/brands/svg/logo-white.svg') }}" class="light-logo"
+                            width="180" alt="" />
                     </a>
                     <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <i class="ti ti-x fs-8 text-muted"></i>
@@ -283,12 +288,14 @@
     <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
     <script src="{{ asset('dist/js/custom.js') }}"></script>
     <!-- current page js files -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    @yield('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @stack('scripts')
 
-    @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+    @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
     @include('components.scripts.submitform')
-    @yield('script')
+    @stack('script')
 </body>
 
 </html>

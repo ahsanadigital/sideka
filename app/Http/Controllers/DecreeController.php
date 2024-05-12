@@ -2,21 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
 use App\Models\Decree;
 use App\Http\Requests\StoreDecreeRequest;
 use App\Http\Requests\UpdateDecreeRequest;
+use App\Services\FileService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class DecreeController extends Controller
 {
+    private FileService $fileService;
+    private ResponseHelper $responseHelper;
+    private Decree $decreeModel;
+    private DataTables $datatables;
+
+    public function __construct()
+    {
+        $this->datatables = datatables();
+        $this->fileService = new FileService();
+        $this->decreeModel = new Decree();
+        $this->responseHelper = new ResponseHelper();
+    }
+
+
     /**
      * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
      */
     public function index(Request $request)
     {
-        if($request->ajax()) {}
+        if ($request->ajax()) {
+            $decreeData = $this->datatables->eloquent($this->decreeModel->query())
+                ->addColumn('user', function (Decree $decree) {
+                    return $decree->user->toArray();
+                })
+                ->toJson();
 
-        return view('page.panel.decree');
+            return $decreeData;
+        }
+
+        return view('page.panel.decree.index');
     }
 
     /**
@@ -32,15 +60,38 @@ class DecreeController extends Controller
      */
     public function store(StoreDecreeRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+            $data['document'] = $this->fileService->upload($request, 'decree');
+
+            $this->decreeModel->create($data);
+
+            return $this->responseHelper->success();
+        } catch (\Exception $e) {
+            $this->fileService->remove($data['file']);
+
+            return $this->responseHelper->error($data = [
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Decree $decree)
+    public function show(Decree $decree, Request $request)
     {
-        //
+        $decree->load('user');
+
+        // Load and assign document information
+        $documentInfo = $decree->getFileInformation();
+        $decree->setAttribute('document', $documentInfo);
+
+        if ($request->ajax()) {
+            return $this->responseHelper->success($decree);
+        }
+
+        abort(403);
     }
 
     /**
@@ -56,7 +107,25 @@ class DecreeController extends Controller
      */
     public function update(UpdateDecreeRequest $request, Decree $decree)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            if($request->file('document')) {
+                $data['document'] = $this->fileService->upload($request, 'decree');
+            }
+
+            $decree->update($data);
+
+            return $this->responseHelper->success([
+                'request' => $data
+            ]);
+        } catch (\Exception $e) {
+            $this->fileService->remove($data['file']);
+
+            return $this->responseHelper->error($data = [
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -64,6 +133,15 @@ class DecreeController extends Controller
      */
     public function destroy(Decree $decree)
     {
-        //
+        try {
+            $this->fileService->remove($decree->getAttribute('document'));
+            $decree->delete();
+
+            return $this->responseHelper->success();
+        } catch (\Exception $e) {
+            return $this->responseHelper->error([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

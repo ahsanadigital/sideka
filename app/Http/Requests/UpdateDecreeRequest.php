@@ -11,7 +11,7 @@ class UpdateDecreeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class UpdateDecreeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'number' => 'required|string|max:255',
+            'title' => 'required|max:255|string',
+            'nomenclature' => 'required|string',
+            'start_from' => 'date|required',
+            'users_id' => 'required|exists:users,id',
+            'end_to' => 'date|nullable|after_or_equal:start_from',
+            'document' => 'nullable|file|max:4096',
+            'public' => 'required|boolean',
         ];
     }
 }
