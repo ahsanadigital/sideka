@@ -107,11 +107,11 @@
                             <div class="input-radio-button">
                                 <input type="radio" name="public" id="publik-edit" value="1" />
                                 <label for="publik-edit">
-                                    <div class="d-flex gap-3 align-items-center">
+                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/public.png') }}" height="32"
                                             alt="Publikasikan" />
 
-                                        <div class="d-flex flex-column gap-1">
+                                        <div class="d-flex flex-column text-center justify-content-center">
                                             <strong class="mb-0">Publikasikan</strong>
                                             <small class="mb-0 opacity-50">Biarkan publik dokumen ini</small>
                                         </div>
@@ -121,11 +121,11 @@
                             <div class="input-radio-button">
                                 <input type="radio" name="public" id="private-edit" value="0" />
                                 <label for="private-edit">
-                                    <div class="d-flex gap-3 align-items-center">
+                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/private.png') }}" height="32"
                                             alt="Publikasikan" />
 
-                                        <div class="d-flex flex-column gap-1">
+                                        <div class="d-flex flex-column text-center justify-content-center">
                                             <strong class="mb-0">Privasikan</strong>
                                             <small class="mb-0 opacity-50">Jangan publikasi dokumen ini</small>
                                         </div>

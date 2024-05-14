@@ -60,11 +60,11 @@
             if (event.currentTarget.checked) {
                 var $newOption = $(`<option selected="selected" />`).val("{{ auth()->id() }}").text(
                     "{{ auth()->user()->fullname }}")
-                selectTarget.append($newOption).trigger('change');
-                selectTarget.next('.select2-container').hide()
+                $('#user-select_{{ $randomElementId }}').append($newOption).trigger('change');
+                $('#user-select_{{ $randomElementId }}').next('.select2-container').hide()
             } else {
-                selectTarget.val(null).removeAttr('disabled').trigger('change');
-                selectTarget.next('.select2-container').show()
+                $('#user-select_{{ $randomElementId }}').val(null).removeAttr('disabled').trigger('change');
+                $('#user-select_{{ $randomElementId }}').next('.select2-container').show()
             }
         });
     </script>

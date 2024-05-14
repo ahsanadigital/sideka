@@ -17,8 +17,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class FileService
 {
     public function __construct()
-    {
-    }
+    {}
 
     /**
      * Check if the file is exists

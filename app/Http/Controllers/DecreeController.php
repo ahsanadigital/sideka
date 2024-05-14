@@ -6,6 +6,7 @@ use App\Helpers\ResponseHelper;
 use App\Models\Decree;
 use App\Http\Requests\StoreDecreeRequest;
 use App\Http\Requests\UpdateDecreeRequest;
+use App\Services\DateService;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -16,10 +17,12 @@ class DecreeController extends Controller
     private ResponseHelper $responseHelper;
     private Decree $decreeModel;
     private DataTables $datatables;
+    private DateService $dateService;
 
     public function __construct()
     {
         $this->datatables = datatables();
+        $this->dateService = new DateService();
         $this->fileService = new FileService();
         $this->decreeModel = new Decree();
         $this->responseHelper = new ResponseHelper();
@@ -63,6 +66,8 @@ class DecreeController extends Controller
         try {
             $data = $request->validated();
             $data['document'] = $this->fileService->upload($request, 'decree');
+            $data['start_from'] = $this->dateService->convertToPreferredTimezone($request->input('start_from'));
+            $data['end_to'] = $this->dateService->convertToPreferredTimezone($request->input('end_to'));
 
             $this->decreeModel->create($data);
 
@@ -109,6 +114,8 @@ class DecreeController extends Controller
     {
         try {
             $data = $request->validated();
+            $data['start_from'] = $this->dateService->convertToPreferredTimezone($request->input('start_from'));
+            $data['end_to'] = $this->dateService->convertToPreferredTimezone($request->input('end_to'));
 
             if($request->file('document')) {
                 $data['document'] = $this->fileService->upload($request, 'decree');
