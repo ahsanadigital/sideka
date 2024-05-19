@@ -24,7 +24,6 @@ class ImageServiceTest extends TestCase
         $imageSize = ImageService::getImageSize($filePath);
 
         $this->assertCount(7, $imageSize);
-        // Add more specific assertions if needed
     }
 
     /** @test */
