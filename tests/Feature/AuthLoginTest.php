@@ -22,8 +22,8 @@ class AuthLoginTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertRedirect(route('home'));
-        $this->assertAuthenticatedAs($user);
+        $response->assertRedirect(route('home')); // Redirect ke halaman beranda setelah login berhasil
+        $this->assertAuthenticatedAs($user); // Pastikan pengguna telah diautentikasi
     }
 
     /** @test */
@@ -36,11 +36,11 @@ class AuthLoginTest extends TestCase
 
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
-            'password' => 'wrong_password', // Perbaikan: Menggunakan password yang salah
+            'password' => 'wrong_password', // Password salah
         ]);
 
-        $response->assertSessionHasErrors();
-        $this->assertGuest();
+        $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
+        $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
     }
 
     /** @test */
@@ -52,19 +52,18 @@ class AuthLoginTest extends TestCase
         ]);
 
         $response = $this->post(route('login'), [
-            'email' => 'wrong@example.com',
+            'email' => 'wrong@example.com', // Email salah
             'password' => 'password',
         ]);
 
-        $response->assertSessionHasErrors();
-        $this->assertGuest();
+        $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
+        $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
     }
 
     /** @test */
     public function authenticated_user_can_logout()
     {
         $user = User::factory()->create([
-            // Anda dapat membuat pengguna secara langsung masuk dengan menggunakan metode 'create'
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -73,7 +72,7 @@ class AuthLoginTest extends TestCase
 
         $response = $this->post('/logout');
 
-        $response->assertRedirect('/'); // Perbaikan: Pastikan pengguna masuk sebelum mencoba logout
-        $this->assertGuest();
+        $response->assertRedirect('/'); // Redirect ke halaman beranda setelah logout berhasil
+        $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
     }
 }
