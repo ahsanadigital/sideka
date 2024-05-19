@@ -1,4 +1,4 @@
-name: Laravel Testing
+name: Laravel
 
 on:
   push:
@@ -47,7 +47,8 @@ jobs:
         echo "APP_TIMEZONE=UTC" >> .env
 
     - name: Clear config cache
-      run: php artisan config:clear
+      run: |
+        php artisan config:clear || true
 
     - name: Cache Composer dependencies
       uses: actions/cache@v3
@@ -64,7 +65,8 @@ jobs:
         DB_DATABASE: laravel_test
         DB_USERNAME: root
         DB_PASSWORD: root
-      run: composer install --prefer-dist --no-progress --no-interaction
+      run: |
+        composer install --prefer-dist --no-progress --no-interaction || { echo 'Composer install failed' ; exit 1; }
 
     - name: Generate application key
       run: php artisan key:generate
