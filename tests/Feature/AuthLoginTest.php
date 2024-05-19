@@ -9,6 +9,13 @@ class AuthLoginTest extends TestCase
 {
     use DatabaseMigrations;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
+    }
+
     /** @test */
     public function user_can_login_with_valid_credentials()
     {
@@ -22,7 +29,7 @@ class AuthLoginTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'password',
-        ], ['X-CSRF-TOKEN' => $csrfToken]);
+        ]);
 
         $response->assertRedirect(route('home')); // Redirect ke halaman beranda setelah login berhasil
         $this->assertAuthenticatedAs($user); // Pastikan pengguna telah diautentikasi
@@ -39,7 +46,7 @@ class AuthLoginTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'wrong_password',
-        ], ['X-CSRF-TOKEN' => csrf_token()]);
+        ]);
 
         $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
@@ -60,7 +67,7 @@ class AuthLoginTest extends TestCase
             ->post(route('login'), [
                 'email' => 'wrong@example.com', // Email salah
                 'password' => 'password',
-            ], ['X-CSRF-TOKEN' => csrf_token()]);
+            ]);
 
         $response->assertSessionHasErrors(); // Ensure there are validation errors
         $this->assertGuest(); // Ensure the user is not authenticated
@@ -72,10 +79,7 @@ class AuthLoginTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        // Print the CSRF token value for debugging
-        $csrfToken = csrf_token();
-
-        $response = $this->post('/logout', [], ['X-CSRF-TOKEN' => $csrfToken]);
+        $response = $this->post('/logout');
 
         $response->assertRedirect('/'); // Redirect ke halaman beranda setelah logout berhasil
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
