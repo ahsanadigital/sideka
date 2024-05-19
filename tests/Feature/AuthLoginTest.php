@@ -17,10 +17,12 @@ class AuthLoginTest extends TestCase
             'password' => Hash::make('password'),
         ]);
 
+        $csrfToken = csrf_token();
+
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'password',
-        ], ['X-CSRF-TOKEN' => csrf_token()]);
+        ], ['X-CSRF-TOKEN' => $csrfToken]);
 
         $response->assertRedirect(route('home')); // Redirect ke halaman beranda setelah login berhasil
         $this->assertAuthenticatedAs($user); // Pastikan pengguna telah diautentikasi
@@ -36,11 +38,14 @@ class AuthLoginTest extends TestCase
 
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
-            'password' => 'wrong_password', // Password salah
+            'password' => 'wrong_password',
         ], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
+
+        // Dump the session data for debugging
+        dd(session()->all());
     }
 
     /** @test */
@@ -51,27 +56,27 @@ class AuthLoginTest extends TestCase
             'password' => Hash::make('password'),
         ]);
 
-        $response = $this->post(route('login'), [
-            'email' => 'wrong@example.com', // Email salah
-            'password' => 'password',
-        ], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->withSession(['errors' => new \Illuminate\Support\MessageBag])
+            ->post(route('login'), [
+                'email' => 'wrong@example.com', // Email salah
+                'password' => 'password',
+            ], ['X-CSRF-TOKEN' => csrf_token()]);
 
-        $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
-        $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
+        $response->assertSessionHasErrors(); // Ensure there are validation errors
+        $this->assertGuest(); // Ensure the user is not authenticated
     }
 
     /** @test */
     public function authenticated_user_can_logout()
     {
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-        ]);
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-        $this->actingAs($user); // Masukkan pengguna
+        // Print the CSRF token value for debugging
+        $csrfToken = csrf_token();
+        dd($csrfToken);
 
-        // Pastikan token CSRF disertakan dalam permintaan logout
-        $response = $this->post('/logout', [], ['X-CSRF-TOKEN' => csrf_token()]);
+        $response = $this->post('/logout', [], ['X-CSRF-TOKEN' => $csrfToken]);
 
         $response->assertRedirect('/'); // Redirect ke halaman beranda setelah logout berhasil
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
