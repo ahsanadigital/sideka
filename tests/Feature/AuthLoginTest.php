@@ -20,7 +20,7 @@ class AuthLoginTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'password',
-        ]);
+        ], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertRedirect(route('home')); // Redirect ke halaman beranda setelah login berhasil
         $this->assertAuthenticatedAs($user); // Pastikan pengguna telah diautentikasi
@@ -37,7 +37,7 @@ class AuthLoginTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'wrong_password', // Password salah
-        ]);
+        ], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
@@ -54,7 +54,7 @@ class AuthLoginTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => 'wrong@example.com', // Email salah
             'password' => 'password',
-        ]);
+        ], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
@@ -70,7 +70,8 @@ class AuthLoginTest extends TestCase
 
         $this->actingAs($user); // Masukkan pengguna
 
-        $response = $this->post('/logout');
+        // Pastikan token CSRF disertakan dalam permintaan logout
+        $response = $this->post('/logout', [], ['X-CSRF-TOKEN' => csrf_token()]);
 
         $response->assertRedirect('/'); // Redirect ke halaman beranda setelah logout berhasil
         $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
