@@ -29,14 +29,14 @@ class AuthLoginTest extends TestCase
     /** @test */
     public function user_cannot_login_with_invalid_password()
     {
-        User::factory()->create([
+        $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
 
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
-            'password' => 'wrong_password',
+            'password' => 'wrong_password', // Perbaikan: Menggunakan password yang salah
         ]);
 
         $response->assertSessionHasErrors();
@@ -63,13 +63,17 @@ class AuthLoginTest extends TestCase
     /** @test */
     public function authenticated_user_can_logout()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            // Anda dapat membuat pengguna secara langsung masuk dengan menggunakan metode 'create'
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+        ]);
 
-        $this->actingAs($user);
+        $this->actingAs($user); // Masukkan pengguna
 
         $response = $this->post('/logout');
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('/'); // Perbaikan: Pastikan pengguna masuk sebelum mencoba logout
         $this->assertGuest();
     }
 }
