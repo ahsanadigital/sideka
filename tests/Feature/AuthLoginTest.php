@@ -74,7 +74,6 @@ class AuthLoginTest extends TestCase
 
         // Print the CSRF token value for debugging
         $csrfToken = csrf_token();
-        dd($csrfToken);
 
         $response = $this->post('/logout', [], ['X-CSRF-TOKEN' => $csrfToken]);
 
