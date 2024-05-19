@@ -44,6 +44,10 @@ jobs:
         sed -i 's/DB_DATABASE=laravel/DB_DATABASE=laravel_test/' .env
         sed -i 's/DB_USERNAME=root/DB_USERNAME=root/' .env
         sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
+        echo "APP_TIMEZONE=UTC" >> .env
+
+    - name: Clear config cache
+      run: php artisan config:clear
 
     - name: Cache Composer dependencies
       uses: actions/cache@v3
