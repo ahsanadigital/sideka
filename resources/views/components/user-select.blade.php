@@ -3,10 +3,10 @@
 @endphp
 
 <div class="form-group mb-3">
-    <label for="user-select" class="form-label">Menetapkan Pengguna</label>
+    <label for="user-select_{{ $randomElementId }}" class="form-label">Pengunggah</label>
 
-    <select name="users_id" id="user-select_{{ $randomElementId }}" class="select2 user-select form-control custom-select" style="width: 100%; height: 36px">
-        <option disabled selected>Pilih Pengguna</option>
+    <select name="users_id" id="user-select_{{ $randomElementId }}" class="select2 user-select form-control custom-select"
+        style="width: 100%; height: 36px">
     </select>
 
     <div class="form-check mt-2">
@@ -22,29 +22,17 @@
 
 </div>
 
-@push('links')
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-    <!-- Or for RTL support -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
-    <link rel="stylesheet" href="{{ asset('dist/libs/select2/dist/css/select2.min.css') }}" />
-@endpush
-
-@push('scripts')
-    <script src="{{ asset('dist/libs/select2/dist/js/select2.full.min.js') }}"></script>
-    <script src="{{ asset('dist/libs/select2/dist/js/select2.min.js') }}"></script>
-@endpush
-
 @push('script')
     <script>
         var selectTarget = $('#user-select_{{ $randomElementId }}').select2({
             theme: 'bootstrap-5',
-            placeholder: 'Pilih Pengguna',
-            dropdownParent: $('#user-select_{{ $randomElementId }}').parents('.modal'),
+            width: '100%',
+            placeholder: 'Pilih',
+            dropdownParent: $('#user-select_{{ $randomElementId }}').parent(),
             minimumInputLength: 3,
+            language: 'id',
             ajax: {
-                url: "{{ route('user.index', ['isDropdown' => 'true']) }}",
+                url: "{{ route('api.user.index', ['isDropdown' => 'true']) }}",
                 dataType: 'json',
                 processResults: function(data) {
                     const results = data;
@@ -54,6 +42,12 @@
                     };
                 }
             }
+        });
+
+        selectTarget.on('select2:open', (e) => {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
         });
 
         $('#assign-as-me_{{ $randomElementId }}').on('change', (event) => {

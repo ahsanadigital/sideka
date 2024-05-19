@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * Model for Decree Data
  *
  * @property string $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -60,6 +60,7 @@ class Decree extends Model
         'document',
         'users_id',
         'public',
+        'council_category_id'
     ];
 
     /**
@@ -71,6 +72,16 @@ class Decree extends Model
         'start_from' => 'datetime',
         'end_to' => 'datetime',
     ];
+
+    /**
+     * Getting Category relation
+     *
+     * @return BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(CouncilCategory::class, 'council_category_id', 'id');
+    }
 
     /**
      * User relation method

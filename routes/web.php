@@ -13,13 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', fn () => abort(503, "Sedang dalam tahap pembangunan"));
+Route::get('/surat-keputusan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
+Route::get('/kegiatan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
+Route::get('/keanggotaan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
 
 Auth::routes(['register' => false]);
 
 Route::prefix('/panel')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    Route::resource('council-category', App\Http\Controllers\CouncilCategoryController::class)->only('index');
     Route::resource('decree', App\Http\Controllers\DecreeController::class)->only('index');
     Route::resource('member', App\Http\Controllers\MemberController::class)->only('index');
     Route::resource('meeting', App\Http\Controllers\MeetingController::class)->only('index');

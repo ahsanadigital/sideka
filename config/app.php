@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'Asia/Jakarta'),
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -189,6 +189,11 @@ return [
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+
+        // Enum Alias
+        'CouncilCategoryEnum' => \App\Enums\CouncilCategoryEnum::class,
+        'MeetingTypeEnum' => \App\Enums\MeetingTypeEnum::class,
+        'RoleUserEnum' => \App\Enums\RoleUserEnum::class,
     ])->toArray(),
 
 ];

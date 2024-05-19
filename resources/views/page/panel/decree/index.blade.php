@@ -1,8 +1,21 @@
 @extends('layouts.app')
 
+@section('title', 'Surat Keputusan')
+
 @push('links')
     <link rel="stylesheet" href="{{ asset('dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('dist/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+    <link rel="stylesheet" href="{{ asset('dist/libs/select2/dist/css/select2.min.css') }}" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css"
+        crossorigin="anonymous" />
 @endpush
 
 @section('content')
@@ -30,10 +43,33 @@
         </div>
     </div>
 
-    <div class="d-flex my-3 justify-content-between">
-        <div class="left-side">
+    <div class="row my-3 justify-content-between">
+        <div class="left-side col-md-4">
+            <form action="{{ request()->fullUrl() }}" class="d-flex gap-2" id="auto-submit-form">
+                <select name="council_level" id="council_level" class="form-select" onchange="this.form.submit()">
+                    <option value="">Semua</option>
+                    @foreach (RoleUserEnum::cases() as $roles)
+                        <option value="{{ $roles->value }}"
+                            {{ request('council_level') == $roles->value ? 'selected' : '' }}>{{ $roles->label() }}</option>
+                    @endforeach
+                </select>
+
+                <select name="category" id="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">Semua</option>
+                    @forelse ($councilCategories as $council)
+                        <option value="{{ $council->id }}" {{ request('category') == $council->id ? 'selected' : '' }}>
+                            {{ $council->name }}
+                        </option>
+                    @empty
+                        <option value="">Tidak ada kategori</option>
+                    @endforelse
+                </select>
+            </form>
         </div>
-        <div class="right-side">
+        <div class="right-side d-flex col-md-4 justify-content-end gap-2 align-items-center">
+            <a href="#" class="btn btn-success d-flex gap-2 align-items-center" onclick="refreshTable()">
+                <i class="ti ti-reload"></i><span>Segarkan</span>
+            </a>
             <a href="#" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal"
                 data-bs-target="#modalCreation">
                 <i class="ti ti-plus"></i><span>Tambah</span>
@@ -41,7 +77,7 @@
         </div>
     </div>
 
-    <div class="card card-body">
+    <div class="card shadow-none border card-body">
         <div class="table-responsive">
             <table class="table w-100 table-striped table-bordered table-hover" id="table-ajax">
                 <thead>
@@ -68,35 +104,49 @@
     <script src="{{ asset('dist/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+
+    <script src="{{ asset('dist/libs/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/select2/dist/js/select2.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
 @endpush
 
 @push('script')
     <script>
-        initializeDataTableWithAjax('table-ajax', '{{ route('decree.index') }}', [{
-                data: 'title'
-            },
-            {
-                data: 'number'
-            },
-            {
-                data: 'id',
-                render(a, b, c) {
-                    let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
-                    let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
-                        'Tidak ditentukan';
-                    return `${$start} - ${$end}`;
+        initializeDataTableWithAjax(
+            'table-ajax',
+            generateAjaxUrl(
+                `{{ route('api.decree.index') }}`, {
+                    council_level: `{{ request('council_level') }}`,
+                    category: `{{ request('category') }}`
+                }
+            ),
+            [{
+                    data: 'title'
                 },
-            },
-            {
-                data: 'user',
-                render(a) {
-                    return `<a href="{{ url('/user') }}/${a.id}">${a.fullname}</a>`;
+                {
+                    data: 'number'
                 },
-            },
-            {
-                data: 'id',
-                render(a) {
-                    return `
+                {
+                    data: 'id',
+                    render(a, b, c) {
+                        let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
+                        let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
+                            'Tidak ditentukan';
+                        return `${$start} - ${$end}`;
+                    },
+                },
+                {
+                    data: 'user',
+                    render(a) {
+                        return `<a href="{{ url('/user') }}/${a.id}">${a.fullname}</a>`;
+                    },
+                },
+                {
+                    data: 'id',
+                    render(a) {
+                        return `
                         <form data-target="#table-ajax" data-reload-table="true" action="{{ url('api/decree') }}/${a}" data-success-message="Data berhasil dihapus dari sistem" id="deletedata-${a}" class="form-ajax" method="POST">
                             @csrf
                             @method('DELETE')
@@ -108,9 +158,14 @@
                             <a href="javascript:handleButton('delete', '${a}')" class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></a>
                         </div>
                     `;
-                },
-            },
-        ]);
+                    },
+                }
+            ]
+        );
+
+        function refreshTable() {
+            reloadDataTable('#table-ajax')
+        }
 
         function handleButton(action, dataId) {
             if (action == 'show') {

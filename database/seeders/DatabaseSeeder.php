@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
 
         # Seed the data
         $this->call([
+            CouncilCategorySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
         ]);

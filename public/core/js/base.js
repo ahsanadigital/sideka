@@ -38,6 +38,22 @@ function encodeArrayToURL(array) {
 }
 
 /**
+ * Generate URL with query parameters
+ * @param {string} baseUrl - The base URL without query parameters.
+ * @param {Object} params - The query parameters as key-value pairs.
+ * @returns {string} - The complete URL with encoded query parameters.
+ */
+function generateAjaxUrl(baseUrl, params) {
+    const queryString = Object.keys(params)
+        .map(
+            (key) =>
+                `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+        )
+        .join("&");
+    return `${baseUrl}?${queryString}`;
+}
+
+/**
  * Initialize DataTable with AJAX.
  *
  * @param {string} tableId - The ID of the table to initialize DataTable.
@@ -354,9 +370,8 @@ const resetError = (element) => {
 /**
  * Enables all inputs.
  */
-const enableInputs = () => {
-    $("button,input,textarea").removeAttr("disabled");
-};
+const enableInputs = () =>
+    $("button,input,textarea,select").removeAttr("disabled");
 
 /**
  * Displays form errors by adding invalid classes to inputs and showing error messages.
@@ -561,6 +576,13 @@ function initPDFViewer(pdfUrl, containerId, pageInit = 1) {
 }
 
 /**
+ * Memuat ulang data dalam tabel DataTables menggunakan AJAX.
+ * @param {string} tableId - ID tabel DataTables yang ingin dimuat ulang.
+ */
+const reloadDataTable = (tableId) =>
+    new $.fn.dataTable.Api(tableId).ajax.reload();
+
+/**
  * Initializes form autosubmit AJAX.
  *
  * @param {string} target Target element in the form of ID or class
@@ -571,7 +593,7 @@ function initPDFViewer(pdfUrl, containerId, pageInit = 1) {
  */
 function initFormAjax(target, onSuccess, onError, onFinish) {
     $(document).ready(function () {
-        $('body').on('submit', target, function (event) {
+        $("body").on("submit", target, function (event) {
             event.preventDefault();
             var form = $(this);
 
@@ -611,8 +633,10 @@ function initFormAjax(target, onSuccess, onError, onFinish) {
                         }
 
                         if (xhr.status === 200 && form.data("reload-table")) {
+                            enableInputs();
+
                             var tableId = form.data("target");
-                            new $.fn.dataTable.Api(`${tableId}`).ajax.reload();
+                            reloadDataTable(`${tableId}`);
 
                             toastrToast(
                                 "success",
@@ -681,12 +705,32 @@ function initFormAjax(target, onSuccess, onError, onFinish) {
 }
 
 /**
+ * Removing double backdrop modal bootstrap
+ *
+ * @see [Bootstrap multiple modals modal-backdrop issue](https://stackoverflow.com/a/44588254/17911271)
+ */
+function removingDoubleModalBackdrop() {
+    $(".modal").on("shown.bs.modal", function () {
+        if ($(".modal-backdrop").length > 1) {
+            $(".modal-backdrop").not(':first').remove();
+        }
+    });
+
+    $(document).on('show.bs.modal', '.modal', function () {
+        if ($(".modal-backdrop").length > -1) {
+            $(".modal-backdrop").not(':first').remove();
+        }
+    });
+}
+
+/**
  * Initializes all functions.
  */
 function initAll() {
     initFormUpload(".file-upload-container");
     initFormAjax(".form-ajax");
     disableHashbangLink();
+    removingDoubleModalBackdrop();
 }
 
 initAll();

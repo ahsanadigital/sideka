@@ -8,8 +8,8 @@
             </div>
             <div class="modal-body">
                 <form data-target="#table-ajax" data-reload-table="true" data-reset-form="true"
-                    data-success-message="Berhasil menambahkan data Surat Keterangan" id="editdata-form"
-                    method="POST" class="form-adddata form-ajax">
+                    data-success-message="Berhasil menambahkan data Surat Keterangan" id="editdata-form" method="POST"
+                    class="form-adddata form-ajax">
                     @csrf
                     @method('PUT')
 
@@ -71,6 +71,9 @@
                     @includeWhen(auth()->user()->hasRole(['region', 'regency']),
                         'components.user-select')
 
+                    {{-- Category --}}
+                    @include('components.category-select')
+
                     {{-- Unggah Berkas --}}
                     <div class="form-group mb-3">
                         <div class="form-label">Unggah berkas</div>
@@ -107,7 +110,8 @@
                             <div class="input-radio-button">
                                 <input type="radio" name="public" id="publik-edit" value="1" />
                                 <label for="publik-edit">
-                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
+                                    <div
+                                        class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/public.png') }}" height="32"
                                             alt="Publikasikan" />
 
@@ -121,7 +125,8 @@
                             <div class="input-radio-button">
                                 <input type="radio" name="public" id="private-edit" value="0" />
                                 <label for="private-edit">
-                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
+                                    <div
+                                        class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/private.png') }}" height="32"
                                             alt="Publikasikan" />
 
@@ -203,6 +208,7 @@
                 (a, b, c) => {
                     const data = a.data,
                         userData = data?.user,
+                        categoryData = data?.category,
                         modal = $('.modal#editData');
 
                     // Change target update data url
@@ -225,6 +231,11 @@
                     let dropdownInjectUserData = $(
                         `<option selected value="${userData.id}">${userData.fullname}</option>`);
                     modal.find('.user-select').append(dropdownInjectUserData).trigger('change');
+
+                    // Change Category Data
+                    let dropdownInjectCategoryData = $(
+                        `<option selected value="${categoryData.id}">${categoryData.name}</option>`);
+                    modal.find('.category-select').append(dropdownInjectCategoryData).trigger('change');
 
                     modal.modal('show');
                 },

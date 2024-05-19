@@ -18,5 +18,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('decree', App\Http\Controllers\DecreeController::class);
-Route::apiResource('user', App\Http\Controllers\UserController::class);
+Route::apiResource('decree', App\Http\Controllers\DecreeController::class)->names(['index' => 'api.decree.index']);
+Route::apiResource('user', App\Http\Controllers\UserController::class)->names(['index' => 'api.user.index']);
+Route::apiResource('council-category', App\Http\Controllers\CouncilCategoryController::class)->names(['index' => 'api.council-category.index']);
+
+Route::prefix('miscellaneous')->group(function() {
+    Route::get('download-file', [App\Http\Controllers\UtilsController::class, 'downloadFile'])->name('download-file');
+    Route::any('search-data', [App\Http\Controllers\UtilsController::class, 'searchData'])->name('search');
+});

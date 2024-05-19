@@ -24,6 +24,15 @@
         <span class="hide-menu">Aktivitas Dewan Kerja</span>
     </li>
 
+    <li class="sidebar-item {{ request()->routeIs('council-category.*') ? 'active' : '' }}">
+        <a class="sidebar-link" href="{{ route('council-category.index') }}" aria-expanded="false">
+            <span>
+                <i class="ti ti-package"></i>
+            </span>
+            <span class="hide-menu">Kategori Data</span>
+        </a>
+    </li>
+
     <li class="sidebar-item {{ request()->routeIs('decree.*') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('decree.index') }}" aria-expanded="false">
             <span>

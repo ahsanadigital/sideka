@@ -1,8 +1,3 @@
-@push('links')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css"
-        crossorigin="anonymous" />
-@endpush
-
 <!-- Modal Create -->
 <div class="modal fade" id="modalCreation" tabindex="-1" aria-labelledby="modalCreationLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -88,6 +83,9 @@
                     @includeWhen(auth()->user()->hasRole(['region', 'regency']),
                         'components.user-select')
 
+                    {{-- Category --}}
+                    @include('components.category-select')
+
                     {{-- Unggah Berkas --}}
                     <div class="form-group mb-3">
                         <div class="form-label">Unggah berkas</div>
@@ -163,11 +161,6 @@
     </div>
 </div>
 <!-- Modal Create -->
-
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
-@endpush
 
 @push('script')
     <script>

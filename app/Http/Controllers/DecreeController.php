@@ -13,21 +13,20 @@ use Yajra\DataTables\DataTables;
 
 class DecreeController extends Controller
 {
-    private FileService $fileService;
-    private ResponseHelper $responseHelper;
-    private Decree $decreeModel;
-    private DataTables $datatables;
-    private DateService $dateService;
+    private FileService $_fileService;
+    private ResponseHelper $_responseHelper;
+    private Decree $_decreeModel;
+    private DataTables $_datatables;
+    private DateService $_dateService;
 
     public function __construct()
     {
-        $this->datatables = datatables();
-        $this->dateService = new DateService();
-        $this->fileService = new FileService();
-        $this->decreeModel = new Decree();
-        $this->responseHelper = new ResponseHelper();
+        $this->_datatables = datatables();
+        $this->_dateService = new DateService();
+        $this->_fileService = new FileService();
+        $this->_decreeModel = new Decree();
+        $this->_responseHelper = new ResponseHelper();
     }
-
 
     /**
      * Display a listing of the resource.
@@ -38,13 +37,27 @@ class DecreeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $decreeData = $this->datatables->eloquent($this->decreeModel->query())
+            $query = $this->_decreeModel->query()
+                ->when($request->input('council_level'), function ($query, $authorLevel) {
+                    return $query->whereHas('user.roles', function ($query) use ($authorLevel) {
+                        $query->where('name', $authorLevel);
+                    });
+                })
+                ->when($request->input('category'), function ($query, $category) {
+                    return $query->where('council_category_id', $category);
+                });
+
+            $decreeData = $this->_datatables->eloquent($query)
                 ->addColumn('user', function (Decree $decree) {
                     return $decree->user->toArray();
                 })
                 ->toJson();
 
             return $decreeData;
+        }
+
+        if ($request->route()->getPrefix() === 'api') {
+            return abort(403);
         }
 
         return view('page.panel.decree.index');
@@ -55,7 +68,7 @@ class DecreeController extends Controller
      */
     public function create()
     {
-        //
+        // Not Being Used
     }
 
     /**
@@ -65,17 +78,17 @@ class DecreeController extends Controller
     {
         try {
             $data = $request->validated();
-            $data['document'] = $this->fileService->upload($request, 'decree');
-            $data['start_from'] = $this->dateService->convertToPreferredTimezone($request->input('start_from'));
-            $data['end_to'] = $this->dateService->convertToPreferredTimezone($request->input('end_to'));
+            $data['document'] = $this->_fileService->upload($request, 'decree');
+            $data['start_from'] = $this->_dateService->convertToPreferredTimezone($request->input('start_from'));
+            $data['end_to'] = $this->_dateService->convertToPreferredTimezone($request->input('end_to'));
 
-            $this->decreeModel->create($data);
+            $this->_decreeModel->create($data);
 
-            return $this->responseHelper->success();
+            return $this->_responseHelper->success();
         } catch (\Exception $e) {
-            $this->fileService->remove($data['file']);
+            $this->_fileService->remove($data['file']);
 
-            return $this->responseHelper->error($data = [
+            return $this->_responseHelper->error($data = [
                 'message' => $e->getMessage(),
             ]);
         }
@@ -86,14 +99,14 @@ class DecreeController extends Controller
      */
     public function show(Decree $decree, Request $request)
     {
-        $decree->load('user');
+        $decree->load('user', 'category');
 
         // Load and assign document information
         $documentInfo = $decree->getFileInformation();
         $decree->setAttribute('document', $documentInfo);
 
         if ($request->ajax()) {
-            return $this->responseHelper->success($decree);
+            return $this->_responseHelper->success($decree);
         }
 
         abort(403);
@@ -104,7 +117,7 @@ class DecreeController extends Controller
      */
     public function edit(Decree $decree)
     {
-        //
+        // Not Being Used
     }
 
     /**
@@ -114,22 +127,22 @@ class DecreeController extends Controller
     {
         try {
             $data = $request->validated();
-            $data['start_from'] = $this->dateService->convertToPreferredTimezone($request->input('start_from'));
-            $data['end_to'] = $this->dateService->convertToPreferredTimezone($request->input('end_to'));
+            $data['start_from'] = $this->_dateService->convertToPreferredTimezone($request->input('start_from'));
+            $data['end_to'] = $this->_dateService->convertToPreferredTimezone($request->input('end_to'));
 
-            if($request->file('document')) {
-                $data['document'] = $this->fileService->upload($request, 'decree');
+            if ($request->file('document')) {
+                $data['document'] = $this->_fileService->upload($request, 'decree');
             }
 
             $decree->update($data);
 
-            return $this->responseHelper->success([
+            return $this->_responseHelper->success([
                 'request' => $data
             ]);
         } catch (\Exception $e) {
-            $this->fileService->remove($data['file']);
+            $this->_fileService->remove($data['file']);
 
-            return $this->responseHelper->error($data = [
+            return $this->_responseHelper->error($data = [
                 'message' => $e->getMessage(),
             ]);
         }
@@ -141,12 +154,12 @@ class DecreeController extends Controller
     public function destroy(Decree $decree)
     {
         try {
-            $this->fileService->remove($decree->getAttribute('document'));
+            $this->_fileService->remove($decree->getAttribute('document'));
             $decree->delete();
 
-            return $this->responseHelper->success();
+            return $this->_responseHelper->success();
         } catch (\Exception $e) {
-            return $this->responseHelper->error([
+            return $this->_responseHelper->error([
                 'message' => $e->getMessage(),
             ]);
         }

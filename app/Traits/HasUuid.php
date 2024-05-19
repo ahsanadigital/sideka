@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
@@ -21,9 +22,9 @@ trait HasUuid
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = Str::uuid()->toString();
+        static::creating(function (Model $model) {
+            if (empty($model->getAttribute($model->getKeyName()))) {
+                $model->setAttribute($model->getKeyName(), Str::uuid()->toString());
             }
         });
     }

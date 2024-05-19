@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\MeetingTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
- * 
+ * Model for Meeting Data
  *
  * @method static \Database\Factories\MeetingFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Meeting newModelQuery()
@@ -17,4 +19,14 @@ use Illuminate\Database\Eloquent\Model;
 class Meeting extends Model
 {
     use HasFactory;
+
+    /**
+     * Getting the meeting type enumerator
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
+    public static function getMeetingTypeEnum(): Collection
+    {
+        return collect(MeetingTypeEnum::cases())->pluck('value');
+    }
 }

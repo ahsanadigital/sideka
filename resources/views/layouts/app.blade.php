@@ -3,7 +3,12 @@
 
 <head>
     <!--  Title -->
+    @hasSection('title')
+    <title>{{ $__env->yieldContent('title') }} &bullet; {{ config('app.name') }}</title>
+    @else
     <title>{{ config('app.name') }}</title>
+    @endif
+
     <!--  Required Meta Tag -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,6 +35,9 @@
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('core/css/base.css') }}" />
     @stack('styles')
+
+    <!-- Core Hot Reload -->
+    @vite('resources/js/app.js')
 </head>
 
 <body>

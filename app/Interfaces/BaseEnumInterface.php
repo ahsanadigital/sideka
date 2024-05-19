@@ -24,11 +24,4 @@ interface BaseEnumInterface
      * @return string
      */
     public function color(): string;
-
-    /**
-     * Give the value for case
-     *
-     * @return string
-     */
-    public static function values(): array;
 }

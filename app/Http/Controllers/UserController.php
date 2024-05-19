@@ -9,11 +9,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    private User $userModel;
+    private User $_userModel;
 
     public function __construct()
     {
-        $this->userModel = new User();
+        $this->_userModel = new User();
     }
 
     /**
@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             if ($request->isDropdown) {
-                return $this->userModel->where('id', '!=', Auth::id())
+                return $this->_userModel->where('id', '!=', Auth::id())
                     ->when($request->term, function ($item) use ($request) {
                         $item->where('fullname', 'LIKE', "%{$request->term}%");
                     })
@@ -34,7 +34,7 @@ class UserController extends Controller
                     ]);
             }
 
-            return DataTables::eloquent($this->userModel->query())->toJson();
+            return DataTables::eloquent($this->_userModel->query())->toJson();
         }
 
         return view('page.panel.user');

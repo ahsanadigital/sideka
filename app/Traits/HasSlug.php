@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
@@ -20,7 +21,7 @@ trait HasSlug
     {
         parent::boot();
 
-        static::creating(fn($model) => $model->slug = Str::slug($model->title ? $model->title : $model->name));
-        static::updating(fn($model) => $model->slug = Str::slug($model->title ? $model->title : $model->name));
+        static::creating(fn(Model $model) => $model->setAttribute('slug', Str::slug($model->title ? $model->title : $model->name)));
+        static::updating(fn(Model $model) => $model->setAttribute('slug', Str::slug($model->title ? $model->title : $model->name)));
     }
 }

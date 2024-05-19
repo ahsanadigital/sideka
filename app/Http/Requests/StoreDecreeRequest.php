@@ -30,6 +30,7 @@ class StoreDecreeRequest extends FormRequest
             'end_to' => 'date|nullable|after_or_equal:start_from',
             'document' => 'required|file|max:4096',
             'public' => 'required|boolean',
+            'council_category_id' => 'required|exists:council_categories,id'
         ];
     }
 }

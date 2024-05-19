@@ -5,15 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Meeting;
 use App\Http\Requests\StoreMeetingRequest;
 use App\Http\Requests\UpdateMeetingRequest;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class MeetingController extends Controller
 {
+    private Meeting $_meetingModel;
+    private DataTables $_datatables;
+
+    public function __construct()
+    {
+        $this->_datatables = datatables();
+        $this->_meetingModel = new Meeting();
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            return $this->_datatables->eloquent($this->_meetingModel->query())
+                ->addColumn('user', function (Meeting $decree) {
+                    return $decree->user->toArray();
+                })
+                ->toJson();
+        }
+
+        return view('page.panel.meeting.index');
     }
 
     /**

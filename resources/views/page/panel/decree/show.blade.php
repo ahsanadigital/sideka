@@ -33,6 +33,14 @@
                             <th class="w-25">Berkas</th>
                             <td id="download-file"></td>
                         </tr>
+                        <tr>
+                            <th class="w-25">Publikasi</th>
+                            <td id="publication"></td>
+                        </tr>
+                        <tr>
+                            <th class="w-25">Kategori</th>
+                            <td id="category"></td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -56,9 +64,10 @@
                 'GET',
                 () => toastrToast("info", "Sedang memproses..."),
                 (a, b, c) => {
-                    const data = a.data;
-                    const userData = data?.user;
-                    const modal = $('.modal#showData');
+                    const data = a.data,
+                        userData = data?.user,
+                        categoryData = data?.category,
+                        modal = $('.modal#showData');
 
                     let $start = moment.utc(data.start_from).locale('id').format('D MMMM YYYY');
                     let $end = data.end_to ? moment.utc(data.end_to).locale('id').format('D MMMM YYYY') :
@@ -68,6 +77,8 @@
                     modal.find('td#number').text(data.number);
                     modal.find('td#nomenclature').text(data.nomenclature);
                     modal.find('td#implementation-date').text(`${$start} - ${$end}`);
+                    modal.find('#category').text(categoryData.name);
+
                     modal.find('td#user').html(
                         `<a href="{{ url('/user') }}/${userData.id}">${userData.fullname}</a>`);
                     modal.find('td#download-file').html(
@@ -75,6 +86,7 @@
                         <i class="ti ti-download"></i>
                         <a href="{{ route('utils.download-file') }}?${encodeArrayToURL({'path': data.document.fullpath, 'name': `${data.title}.pdf`})}">Unduh Berkas</a>
                     </div>`);
+                    modal.find('#publication').html(`<span class="badge ${data.public ? 'bg-success' : 'bg-dark'}">${data.public ? 'Dipublikasikan' : 'Tidak Dipublikasikan'}</span>`);
 
                     initPDFViewer(data.document.fullurl, 'pdfShowWrapper');
 

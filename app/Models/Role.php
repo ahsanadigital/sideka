@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
- * 
+ * Model for Role Data
  *
  * @property int $id
  * @property string $name
