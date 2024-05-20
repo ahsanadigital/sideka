@@ -17,6 +17,7 @@ class CouncilCategoryController extends Controller
 
     public function __construct()
     {
+        // $this->middleware();
         $this->_responseHelper = new ResponseHelper;
         $this->_councilCategory = new CouncilCategory;
         $this->_datatables = datatables();

@@ -11,7 +11,6 @@ class UpdateCouncilCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Ubah ini ke 'true' jika Anda ingin mengizinkan semua pengguna untuk membuat permintaan ini.
         return true;
     }
 

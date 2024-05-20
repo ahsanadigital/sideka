@@ -33,6 +33,11 @@ jobs:
         php-version: '8.2'
         extensions: mbstring, pdo, pdo_mysql
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.x'
+
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -47,8 +52,7 @@ jobs:
         echo "APP_TIMEZONE=UTC" >> .env
 
     - name: Clear config cache
-      run: |
-        php artisan config:clear || true
+      run: php artisan config:clear || true
 
     - name: Cache Composer dependencies
       uses: actions/cache@v3
