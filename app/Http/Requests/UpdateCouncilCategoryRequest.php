@@ -11,7 +11,8 @@ class UpdateCouncilCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // Ubah ini ke 'true' jika Anda ingin mengizinkan semua pengguna untuk membuat permintaan ini.
+        return true;
     }
 
     /**
@@ -22,7 +23,32 @@ class UpdateCouncilCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['max:1000'],
+            'color' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'active' => ['required', 'boolean'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Kolom nama wajib diisi.',
+            'name.string' => 'Kolom nama harus berupa string.',
+            'name.max' => 'Kolom nama tidak boleh lebih dari 255 karakter.',
+            'description.required' => 'Kolom deskripsi wajib diisi.',
+            'description.string' => 'Kolom deskripsi harus berupa string.',
+            'description.max' => 'Kolom deskripsi tidak boleh lebih dari 1000 karakter.',
+            'color.required' => 'Kolom warna wajib diisi.',
+            'color.string' => 'Kolom warna harus berupa string.',
+            'color.regex' => 'Kolom warna harus berupa kode warna hex yang valid.',
+            'active.required' => 'Kolom status aktif atau tidaknya wajib diisi.',
+            'active.boolean' => 'Kolom status aktif atau tidaknya harus berupa boolean.',
         ];
     }
 }

@@ -19,6 +19,9 @@
     @else
     <title>{{ config('app.name') }}</title>
     @endif
+
+    <!-- Core Hot Reload -->
+    @vite('resources/js/app.js')
 </head>
 
 <body>
@@ -49,6 +52,8 @@
                             @if($__env->yieldContent('code') !== "503")
                             <a class="btn btn-primary" href="{{ url('/panel') }}" role="button">Kembali Ke Beranda</a>
                             @endif
+
+                            <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" alt="SIDEKA DKD Jatim" height="48" />
                         </div>
                     </div>
                 </div>

@@ -49,10 +49,7 @@ class AuthLoginTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(); // Pastikan ada pesan kesalahan sesi
-        $this->assertGuest(); // Pastikan pengguna tidak diautentikasi
-
-        // Dump the session data for debugging
-        dd(session()->all());
+        $this->assertGuest();
     }
 
     /** @test */

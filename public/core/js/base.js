@@ -116,7 +116,7 @@ const booleanish = (input) =>
  * @param {number} bytes - The file size in bytes.
  * @returns {string} The human-readable file size.
  */
-function humanReadableSize(bytes) {
+function humanReadableFileSize(bytes) {
     const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
     if (bytes === 0) return "0 Byte";
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
@@ -208,7 +208,7 @@ function initFormUpload(targetElement) {
                 toastrToast(
                     "error",
                     "Kesalahan!",
-                    `Berkas yang anda unggah melebihi ketentuan, yakni ${humanReadableSize(
+                    `Berkas yang anda unggah melebihi ketentuan, yakni ${humanReadableFileSize(
                         maxFileSize
                     )}.`
                 );
@@ -223,7 +223,7 @@ function initFormUpload(targetElement) {
                     `
             <div class="d-flex gap-1 flex-column w-75">
                 <div class="fw-bolder text-truncate">${file.name}</div>
-                <div>${humanReadableSize(file.size)}</div>
+                <div>${humanReadableFileSize(file.size)}</div>
             </div>
                 <button class="file-remove btn btn-danger" type="button" aria-label="Hapus berkas">
                     <i class="ti ti-trash"></i>
@@ -364,7 +364,7 @@ function submitForm(formTarget) {
 const resetError = (element) => {
     $("button,input,textarea").attr("disabled", true);
     element.find(".error-wrapper").empty();
-    element.find("input").removeClass("is-invalid");
+    element.find("input,textarea").removeClass("is-invalid");
 };
 
 /**

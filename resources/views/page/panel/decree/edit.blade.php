@@ -212,7 +212,7 @@
                         modal = $('.modal#editData');
 
                     // Change target update data url
-                    modal.find('form').attr('action', `{{ url('/api/decree') }}/${data.id}`)
+                    modal.find('form').attr('action', `{{ url('/api/decree') }}/${data.id}`);
 
                     modal.find('#title').val(data.title);
                     modal.find('#number').val(data.number);

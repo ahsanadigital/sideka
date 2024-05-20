@@ -21,7 +21,7 @@
     <!-- ============================= -->
     <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">Aktivitas Dewan Kerja</span>
+        <span class="hide-menu">Master Data</span>
     </li>
 
     <li class="sidebar-item {{ request()->routeIs('council-category.*') ? 'active' : '' }}">
@@ -31,6 +31,23 @@
             </span>
             <span class="hide-menu">Kategori Data</span>
         </a>
+    </li>
+
+    <li class="sidebar-item {{ request()->routeIs('user.*') ? 'active' : '' }}">
+        <a class="sidebar-link" href="{{ route('user.index') }}" aria-expanded="false">
+            <span>
+                <i class="ti ti-users"></i>
+            </span>
+            <span class="hide-menu">Pengguna</span>
+        </a>
+    </li>
+
+    <!-- ============================= -->
+    <!-- Aktivitas Dewan Kerja -->
+    <!-- ============================= -->
+    <li class="nav-small-cap">
+        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+        <span class="hide-menu">Aktivitas Dewan Kerja</span>
     </li>
 
     <li class="sidebar-item {{ request()->routeIs('decree.*') ? 'active' : '' }}">

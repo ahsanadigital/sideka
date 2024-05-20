@@ -2,6 +2,11 @@
 
 @section('title', 'Pertemuan dan Rapat')
 
+@push('links')
+    <link rel="stylesheet" href="{{ asset('dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('dist/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" />
+@endpush
+
 @section('content')
     <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
         <div class="card-body px-4 py-3">
@@ -49,7 +54,7 @@
                         <th>Judul</th>
                         <th>Nomor SK</th>
                         <th>Tanggal Berlaku</th>
-                        <th>Pengunggah</th>
+                        <th>Warna Label</th>
                         <th class="no-sort">Aksi</th>
                     </tr>
                 </thead>
@@ -57,3 +62,78 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+@endpush
+
+@push('script')
+    <script>
+        initializeDataTableWithAjax(
+            'table-ajax',
+            generateAjaxUrl(
+                `{{ route('api.decree.index') }}`, {
+                    council_level: `{{ request('council_level') }}`,
+                    category: `{{ request('category') }}`
+                }
+            ),
+            [{
+                    data: 'title'
+                },
+                {
+                    data: 'number'
+                },
+                {
+                    data: 'id',
+                    render(a, b, c) {
+                        let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
+                        let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
+                            'Tidak ditentukan';
+                        return `${$start} - ${$end}`;
+                    },
+                },
+                {
+                    data: 'user',
+                    render(a) {
+                        return `<a href="{{ url('/user') }}/${a.id}">${a.fullname}</a>`;
+                    },
+                },
+                {
+                    data: 'id',
+                    render(a) {
+                        return `
+                        <form data-target="#table-ajax" data-reload-table="true" action="{{ url('api/decree') }}/${a}" data-success-message="Data berhasil dihapus dari sistem" id="deletedata-${a}" class="form-ajax" method="POST">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="javascript:handleButton('show', '${a}')" class="btn btn-sm btn-primary"><i class="ti ti-eye"></i></a>
+                            <a href="javascript:handleButton('edit', '${a}')" class="btn btn-sm btn-light"><i class="ti ti-pencil"></i></a>
+                            <a href="javascript:handleButton('delete', '${a}')" class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></a>
+                        </div>
+                    `;
+                    },
+                }
+            ]
+        );
+
+        function refreshTable() {
+            reloadDataTable('#table-ajax')
+        }
+
+        function handleButton(action, dataId) {
+            if (action == 'show') {
+                viewData(dataId);
+            }
+
+            if (action == 'edit') {
+                editData(dataId);
+            }
+
+            if (action === 'delete') {
+                runModalConfirmWithSubmit('Data yang akan dihapus, tidak akan kembali lagi.', `#deletedata-${dataId}`)
+            }
+        }
+    </script>
+@endpush

@@ -20,5 +20,6 @@ class CouncilCategory extends Model
         'slug',
         'description',
         'active',
+        'color',
     ];
 }
