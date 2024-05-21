@@ -37,4 +37,22 @@ class LoginController extends Controller
         $this->redirectTo = route('home');
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Handle a failed login attempt.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $field = $this->username(); // Dapatkan kolom username (email atau username)
+        $error = $field === 'email'
+            ? trans('auth.failed')
+            : 'These credentials do not match our records.';
+
+        return redirect()->back()
+            ->withInput($request->only($field, 'remember'))
+            ->withErrors([$field => $error]);
+    }
 }
