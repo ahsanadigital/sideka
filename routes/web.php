@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => abort(503, "Sedang dalam tahap pembangunan"));
+Route::get('/', fn () => view('welcome'));
 Route::get('/surat-keputusan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
 Route::get('/kegiatan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
 Route::get('/keanggotaan', fn () => abort(503, "Sedang dalam tahap pembangunan"));
