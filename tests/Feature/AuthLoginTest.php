@@ -24,8 +24,6 @@ class AuthLoginTest extends TestCase
             'password' => Hash::make('password'),
         ]);
 
-        $csrfToken = csrf_token();
-
         $response = $this->post(route('login'), [
             'email' => 'test@example.com',
             'password' => 'password',
@@ -38,7 +36,7 @@ class AuthLoginTest extends TestCase
     /** @test */
     public function user_cannot_login_with_invalid_password()
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
