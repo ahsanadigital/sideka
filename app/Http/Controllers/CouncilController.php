@@ -8,12 +8,20 @@ use App\Http\Requests\UpdateCouncilRequest;
 
 class CouncilController extends Controller
 {
+    private Council $_council;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->_council = new Council();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('page.panel.council.index');
     }
 
     /**

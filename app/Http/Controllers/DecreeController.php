@@ -80,7 +80,7 @@ class DecreeController extends Controller
             $data = $request->validated();
             $data['document'] = $this->_fileService->upload($request, 'decree');
             $data['start_from'] = $this->_dateService->convertToPreferredTimezone($request->input('start_from'));
-            $data['end_to'] = $this->_dateService->convertToPreferredTimezone($request->input('end_to'));
+            $data['end_to'] = $request->input('end_to') ? $this->_dateService->convertToPreferredTimezone($request->input('end_to')) : null;
 
             $this->_decreeModel->create($data);
 

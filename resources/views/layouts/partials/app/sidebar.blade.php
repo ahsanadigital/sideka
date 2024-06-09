@@ -16,8 +16,9 @@
         </a>
     </li>
 
+    @role('region')
     <!-- ============================= -->
-    <!-- Aktivitas Dewan Kerja -->
+    <!-- Master Data -->
     <!-- ============================= -->
     <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -41,6 +42,16 @@
             <span class="hide-menu">Pengguna</span>
         </a>
     </li>
+
+    <li class="sidebar-item disabled">
+        <a class="sidebar-link disabled" href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Fitur ini masih belum tersedia." aria-expanded="false">
+            <span>
+                <i class="ti ti-stack"></i>
+            </span>
+            <span class="hide-menu">SPK</span>
+        </a>
+    </li>
+    @endif
 
     <!-- ============================= -->
     <!-- Aktivitas Dewan Kerja -->

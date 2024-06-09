@@ -18,6 +18,8 @@
     <meta name="author" content="" />
     <meta name="keywords" content="Mordenize" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
     <!--  Favicon -->
     <link rel="shortcut icon" type="image/ico" href="{{ asset('favicon.ico') }}" />
     <!-- Owl Carousel  -->
@@ -31,6 +33,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Core Css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.35.0/iconfont/tabler-icons.min.css" integrity="sha512-tpsEzNMLQS7w9imFSjbEOHdZav3/aObSESAL1y5jyJDoICFF2YwEdAHOPdOr1t+h8hTzar0flphxR76pd0V1zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('assets/extra-libs/tabler-icon/tabler-icons.min.css') }}" />
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('core/css/base.css') }}" />

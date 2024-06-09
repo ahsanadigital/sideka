@@ -26,7 +26,12 @@ class DatabaseSeeder extends Seeder
 
         # Seed the data
         $this->call([
-            CouncilCategorySeeder::class,
+            IndonesianRegionProvinceSeeder::class,
+            IndonesianRegionRegencySeeder::class,
+            IndonesianRegionDistrictSeeder::class,
+            IndonesianRegionVillageSeeder::class,
+            
+            CouncilCategorySeeder::class,                               
             RoleSeeder::class,
             UserSeeder::class,
         ]);
