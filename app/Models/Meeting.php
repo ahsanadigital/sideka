@@ -6,6 +6,7 @@ use App\Enums\MeetingTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Model for Meeting Data
@@ -18,7 +19,7 @@ use Illuminate\Support\Collection;
  */
 class Meeting extends Model
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * Getting the meeting type enumerator

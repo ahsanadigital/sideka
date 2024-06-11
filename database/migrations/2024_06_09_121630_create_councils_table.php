@@ -16,13 +16,20 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('name');
+            $table->string('logo')->nullable();
             $table->string('website')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->text('address_street')->nullable();
             $table->text('address_building')->nullable();
-            $table->foreignId('indonesian_region_village_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('indonesian_region_district_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('indonesian_region_regency_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('indonesian_region_province_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('address_village')->nullable()->constrained('indonesian_region_villages')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('address_district')->nullable()->constrained('indonesian_region_districts')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('address_regency')->nullable()->constrained('indonesian_region_regencies')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('address_province')->nullable()->constrained('indonesian_region_provinces')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->char('address_postcode', 6)->nullable();
+            $table->string('pic_name')->nullable();
+            $table->string('pic_phone')->nullable();
+            $table->string('pic_email')->nullable();
         });
     }
 

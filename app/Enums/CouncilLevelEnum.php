@@ -3,7 +3,7 @@
 namespace App\Enums;
 use App\Interfaces\BaseEnumInterface;
 
-enum EventLevelEnum: string implements BaseEnumInterface
+enum CouncilLevelEnum: string implements BaseEnumInterface
 {
     case GUDEP = 'gudep';
     case DISTRICT = 'ranting';
