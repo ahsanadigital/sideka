@@ -87,7 +87,7 @@
             <span class="hide-menu">Surat-Menyurat</span>
         </a>
     </li>
-
+{{--
     <li class="sidebar-item {{ request()->routeIs('council.*') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('council.index') }}" aria-expanded="false">
             <span>
@@ -95,7 +95,7 @@
             </span>
             <span class="hide-menu">Kwartir</span>
         </a>
-    </li>
+    </li> --}}
 
     <!-- ============================= -->
     <!-- Manajemen Dewan Kerja -->

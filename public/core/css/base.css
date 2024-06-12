@@ -31,6 +31,12 @@
     gap: .75rem;
 }
 
+.file-upload-container .file-list {
+    max-height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
 .file-upload-container label .file-upload-label i {
     font-size: 2rem;
 }

@@ -15,9 +15,9 @@
 
     <!-- Title -->
     @hasSection('title')
-    <title>{{ $__env->yieldContent('title') }} &bullet; {{ config('app.name') }}</title>
+        <title>{{ $__env->yieldContent('title') }} &bullet; {{ config('app.name') }}</title>
     @else
-    <title>{{ config('app.name') }}</title>
+        <title>{{ config('app.name') }}</title>
     @endif
 
     <!-- Core Hot Reload -->
@@ -39,21 +39,25 @@
             <div class="d-flex align-items-center justify-content-center w-100">
                 <div class="row justify-content-center w-100">
                     <div class="col-lg-4">
-                        <div class="text-center">
-                            <img src="{{ asset("core/images/errors/{$__env->yieldContent('code')}.svg") }}" alt="modernize-img" class="img-fluid"
-                                width="400" />
-                            <h1 class="fw-semibold mb-2 fs-9">
+                        <div class="text-center d-flex flex-column align-items-center gap-3">
+                            <img src="{{ asset("core/images/errors/{$__env->yieldContent('code')}.svg") }}"
+                                alt="modernize-img" class="img-fluid mb-4" width="400" />
+                            <h1 class="fw-semibold mb-0 fs-9">
                                 @yield('code')
                             </h1>
                             <h4 class="fw-semibold mb-4 text-muted">
                                 @yield('message')
                             </h4>
 
-                            @if($__env->yieldContent('code') !== "503")
-                            <a class="btn btn-primary" href="{{ url('/panel') }}" role="button">Kembali Ke Beranda</a>
-                            @endif
+                            <div class="mx-auto">
+                                @if ($__env->yieldContent('code') !== '503')
+                                    <a class="btn btn-primary" href="{{ url('/panel') }}" role="button">Kembali Ke
+                                        Beranda</a>
+                                @endif
+                            </div>
 
-                            <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" alt="SIDEKA DKD Jatim" height="48" />
+                            <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" alt="SIDEKA DKD Jatim"
+                                height="48" />
                         </div>
                     </div>
                 </div>

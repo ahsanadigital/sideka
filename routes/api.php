@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('decree', App\Http\Controllers\DecreeController::class)->names(['index' => 'api.decree.index']);
 Route::apiResource('user', App\Http\Controllers\UserController::class)->names(['index' => 'api.user.index']);
 Route::apiResource('council-category', App\Http\Controllers\CouncilCategoryController::class)->names(['index' => 'api.council-category.index']);
+Route::apiResource('meeting', App\Http\Controllers\MeetingController::class)->names(['index' => 'api.meeting.index']);
 
 Route::prefix('miscellaneous')->group(function() {
     Route::get('download-file', [App\Http\Controllers\UtilsController::class, 'downloadFile'])->name('download-file');

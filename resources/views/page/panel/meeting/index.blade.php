@@ -5,6 +5,18 @@
 @push('links')
     <link rel="stylesheet" href="{{ asset('dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('dist/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('dist/libs/quill/dist/quill.snow.css') }}" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+    <link rel="stylesheet" href="{{ asset('dist/libs/select2/dist/css/select2.min.css') }}" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css"
+        crossorigin="anonymous" />
 @endpush
 
 @section('content')
@@ -32,6 +44,8 @@
         </div>
     </div>
 
+    @include('page.panel.meeting.create')
+
     <div class="d-flex my-3 justify-content-between">
         <div class="left-side">
         </div>
@@ -51,11 +65,11 @@
             <table class="table w-100 table-striped table-bordered table-hover" id="table-ajax">
                 <thead>
                     <tr>
-                        <th>Judul</th>
-                        <th>Nomor SK</th>
-                        <th>Tanggal Berlaku</th>
-                        <th>Warna Label</th>
-                        <th class="no-sort">Aksi</th>
+                        <th>Nama Agenda</th>
+                        <th>Diselenggarakan Oleh</th>
+                        <th>Tanggal</th>
+                        <th>Jumlah Peserta</th>
+                        <th class="text-center no-sort">#</th>
                     </tr>
                 </thead>
             </table>
@@ -64,11 +78,22 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('dist/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('dist/libs/moment/locale/id.js') }}"></script>
+    <script src="{{ asset('dist/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+
+    <script src="{{ asset('dist/libs/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/quill/dist/quill.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
 @endpush
 
 @push('script')
-    <script>
+    {{-- <script>
         initializeDataTableWithAjax(
             'table-ajax',
             generateAjaxUrl(
@@ -135,5 +160,5 @@
                 runModalConfirmWithSubmit('Data yang akan dihapus, tidak akan kembali lagi.', `#deletedata-${dataId}`)
             }
         }
-    </script>
+    </script> --}}
 @endpush

@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * File: base.js
  * Description: This file contains any code for core JavaScript notification and AJAX.
@@ -16,25 +18,24 @@
  */
 function swalNotify(title, text, icon, timer) {
     Swal.fire({
-        title,
-        text,
-        icon,
-        timer,
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer
     });
 }
 
 /**
- * Converts an array to an encoded URL string.
- * @param {Object} array - The input array.
+ * Converts an object to an encoded URL string.
+ * @param {Object} obj - The input object.
  * @returns {string} The encoded URL string.
  */
-function encodeArrayToURL(array) {
-    return Object.entries(array)
-        .map(
-            ([key, value]) =>
-                `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        )
-        .join("&");
+function encodeObjectToURL(obj) {
+    return Object.keys(obj)
+        .map(function (key) {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]);
+        })
+        .join('&');
 }
 
 /**
@@ -72,22 +73,21 @@ function initializeDataTableWithAjax(tableId, url, columns, method = "GET") {
             responsive: true,
             serverSide: true,
             ajax: {
-                url,
-                method,
+                url: url,
+                method: method
             },
             fixedHeader: {
                 header: true,
-                footer: true,
+                footer: true
             },
-
             language: {
                 lengthMenu: "Menampilkan _MENU_ data per halaman",
                 zeroRecords: "Maaf, data tidak tersedia!",
                 info: "Menampilkan _PAGE_ dari _PAGES_",
                 infoEmpty: "Tidak ada data yang tersedia.",
-                infoFiltered: "(Disaring dari _MAX_ jumlah data)",
+                infoFiltered: "(Disaring dari _MAX_ jumlah data)"
             },
-            columns: columns,
+            columns: columns
         });
     });
 }
@@ -99,7 +99,7 @@ function initializeDataTableWithAjax(tableId, url, columns, method = "GET") {
  * @returns {boolean} True if the input is booleanish, false otherwise.
  */
 const isBooleanish = (input) =>
-    typeof input === "boolean" || /^(true|false)$/i.test(input);
+    typeof input === "boolean" || (/^(true|false)$/i).test(input);
 
 /**
  * Converts a string to a boolean value.
@@ -108,7 +108,7 @@ const isBooleanish = (input) =>
  * @returns {boolean} The boolean value derived from the input string.
  */
 const booleanish = (input) =>
-    /^(true|false)$/i.test(input) ? input.toLowerCase() === "true" : false;
+    (/^(true|false)$/i).test(input) ? input.toLowerCase() === "true" : false;
 
 /**
  * Converts a file size from bytes to a human-readable format.

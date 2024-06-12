@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
 use App\Models\Meeting;
 use App\Http\Requests\StoreMeetingRequest;
 use App\Http\Requests\UpdateMeetingRequest;
@@ -12,10 +13,12 @@ class MeetingController extends Controller
 {
     private Meeting $_meetingModel;
     private DataTables $_datatables;
+    private ResponseHelper $_responseHelper;
 
     public function __construct()
     {
         $this->_datatables = datatables();
+        $this->_responseHelper = new ResponseHelper();
         $this->_meetingModel = new Meeting();
     }
 
@@ -48,7 +51,20 @@ class MeetingController extends Controller
      */
     public function store(StoreMeetingRequest $request)
     {
-        //
+        try {
+            $data = collect($request->validated());
+
+            $meetingData = $this->_meetingModel->create($data->except(['files', 'docs'])->toArray());
+
+            $meetingData->addMediaFromRequest('files')->toMediaCollection('meeting-documentation');
+            $meetingData->addMediaFromRequest('docs')->toMediaCollection('meeting-docs');
+
+            return $this->_responseHelper->success();
+        } catch (\Exception $e) {
+            return $this->_responseHelper->error($data = [
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

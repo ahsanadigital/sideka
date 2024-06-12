@@ -4,9 +4,9 @@
 <head>
     <!--  Title -->
     @hasSection('title')
-    <title>{{ $__env->yieldContent('title') }} &bullet; {{ config('app.name') }}</title>
+        <title>{{ $__env->yieldContent('title') }} &bullet; {{ config('app.name') }}</title>
     @else
-    <title>{{ config('app.name') }}</title>
+        <title>{{ config('app.name') }}</title>
     @endif
 
     <!--  Required Meta Tag -->
@@ -33,14 +33,17 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Core Css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.35.0/iconfont/tabler-icons.min.css" integrity="sha512-tpsEzNMLQS7w9imFSjbEOHdZav3/aObSESAL1y5jyJDoICFF2YwEdAHOPdOr1t+h8hTzar0flphxR76pd0V1zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.35.0/iconfont/tabler-icons.min.css"
+        integrity="sha512-tpsEzNMLQS7w9imFSjbEOHdZav3/aObSESAL1y5jyJDoICFF2YwEdAHOPdOr1t+h8hTzar0flphxR76pd0V1zQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('assets/extra-libs/tabler-icon/tabler-icons.min.css') }}" />
     <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('core/css/base.css') }}" />
     @stack('styles')
 
     <!-- Core Hot Reload -->
-    @vite('resources/js/app.js')
+    @vite('resources/css/app.css')
 </head>
 
 <body>
@@ -61,8 +64,8 @@
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
                     <a href="{{ route('home') }}" class="text-nowrap logo-img">
-                        <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" class="dark-logo" width="180"
-                            alt="" />
+                        <img src="{{ asset('core/images/brands/svg/logo-color.svg') }}" class="dark-logo"
+                            width="180" alt="" />
                         <img src="{{ asset('core/images/brands/svg/logo-white.svg') }}" class="light-logo"
                             width="180" alt="" />
                     </a>
@@ -302,10 +305,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     @stack('scripts')
+    @vite('resources/js/app.js')
 
     @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
     @include('components.scripts.submitform')
+    <script src="{{ asset('core/js/base.js') }}"></script>
+
     @stack('script')
 </body>
 
