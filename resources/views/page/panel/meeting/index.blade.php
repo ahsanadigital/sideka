@@ -44,6 +44,7 @@
         </div>
     </div>
 
+    @include('components.show-errors')
     @include('page.panel.meeting.create')
 
     <div class="d-flex my-3 justify-content-between">

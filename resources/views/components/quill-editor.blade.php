@@ -2,6 +2,10 @@
     <label class="form-label" for="{{ $targetId }}">{{ $label }}</label>
     <div style="height: 200px" id="{{ $targetId }}">{!! old($targetId) !!}</div>
     <input type="hidden" name="{{ $targetId }}" value="{{ old($targetId) }}" />
+
+    @error($targetId)
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 
 @push('script')
@@ -13,7 +17,8 @@
         });
 
         quillEditorInit.on('text-change', function(delta, oldDelta, source) {
-            $("#{{ $targetId }}").next().val(document.querySelector('#{{ $targetId }}').children[0].innerHTML);
+            $("#{{ $targetId }}").next().val(document.querySelector('#{{ $targetId }}').children[0]
+                .innerHTML);
         })
     </script>
 @endpush

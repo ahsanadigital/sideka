@@ -8,30 +8,50 @@
             <div class="modal-body">
 
                 <form action="{{ route('meeting.store') }}" id="createdata-form" class="row"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" method="POST">
 
                     @csrf
 
                     <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input required type="text" class="form-control" id="name" name="name"
-                                placeholder="PERANSAKA NASIONAL" />
-                            <label for="name">Nama Agenda</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input required type="number" class="form-control" id="participant" name="participant"
-                                placeholder="0-Unlimited" />
-                            <label for="participant">Jumlah Peserta</label>
-                        </div>
-
+                        <!-- Name -->
                         <div class="form-group mb-3">
-                            <label for="date">Tanggal Kegiatan</label>
-                            <input required type="text" class="form-control flatpickr" placeholder="Masukan tanggal"
-                                name="date" />
+                            <label class="form-label" for="title">Nama Agenda</label>
+                            <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                id="title" name="title" value="{{ old('title') }}">
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        @include('components.category-select')
+                        <!-- Participant -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="participant">Jumlah Peserta</label>
+                            <input type="number" class="form-control @error('participant') is-invalid @enderror"
+                                id="participant" name="participant" value="{{ old('participant') }}">
+                            @error('participant')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="date" class="form-label">Tanggal Rapat / Pertemuan</label>
+
+                            <div class="input-group date" id="datepicker-startForm" data-td-target-input="nearest">
+                                <input type="text" placeholder="Klik untuk mengubah"
+                                    class="form-control @error('date') is-invalid @enderror datetimepicker-input"
+                                    name="date" data-target="#datepicker-startForm" value="{{ old('date') }}" />
+                                <div class="input-group-text"data-target="#datepicker-startForm"
+                                    data-td-toggle="datetimepicker">
+                                    <i class="ti ti-calendar" aria-hidden="true"></i>
+                                </div>
+                            </div>
+
+                            @error('date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        @include('components.category-select', ['targetName' => 'category_id'])
 
                         @includeWhen(auth()->user()->hasRole(['region', 'regency']),
                             'components.user-select')
@@ -73,7 +93,7 @@
 
                             <div class="error-wrapper"></div>
 
-                            @error('files')
+                            @error('files.*')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -116,8 +136,32 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" onclick="submitForm('#createdata-form')">Simpan dan Tambahkan</button>
+                <button type="button" class="btn btn-primary" onclick="submitForm('#createdata-form')">Simpan dan
+                    Tambahkan</button>
             </div>
         </div>
     </div>
 </div>
+
+@push('script')
+    <script>
+        var startDateInput = document.querySelector('input[name="date"]');
+        var instanceStartDate = new tempusDominus.TempusDominus(startDateInput, {
+            container: startDateInput.closest('.modal'),
+            display: {
+                components: {
+                    clock: false,
+                    calendar: true,
+                },
+                buttons: {
+                    clear: true,
+                },
+                theme: 'light'
+            },
+            localization: {
+                locale: 'id-ID',
+                format: 'yyyy/MM/dd',
+            }
+        });
+    </script>
+@endpush

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 
 /**
  * Model for Meeting Data
@@ -17,9 +18,16 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static \Illuminate\Database\Eloquent\Builder|Meeting query()
  * @mixin \Eloquent
  */
-class Meeting extends Model
+class Meeting extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+
+    /**
+     * The attributes that are guarded to mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [];
 
     /**
      * Getting the meeting type enumerator

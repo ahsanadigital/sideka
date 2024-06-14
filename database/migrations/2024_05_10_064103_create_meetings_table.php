@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('result', 255)->nullable();
 			$table->date('date')->useCurrentOnUpdate();
             $table->foreignId('users_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('category_id')->nullable()->constrained('council_categories')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

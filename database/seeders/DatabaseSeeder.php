@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,7 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     private function cleanupDisk()
     {
-        Storage::disk('public')->deleteDirectory('.');
+        $directory = storage_path('app/public');
+
+        foreach (File::allFiles($directory) as $file) {
+            File::delete($file);
+        }
     }
 
     /**
@@ -30,8 +34,8 @@ class DatabaseSeeder extends Seeder
             IndonesianRegionRegencySeeder::class,
             IndonesianRegionDistrictSeeder::class,
             IndonesianRegionVillageSeeder::class,
-            
-            CouncilCategorySeeder::class,                               
+
+            CouncilCategorySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
         ]);

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('start_from')->nullable()->useCurrent()->useCurrentOnUpdate();
             $table->dateTime('end_to')->nullable();
             $table->string('document')->nullable();
-            $table->foreignId('council_category_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('category_id')->nullable()->constrained('council_categories')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('users_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('public')->default(1);
         });

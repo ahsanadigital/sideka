@@ -22,10 +22,10 @@ class StoreMeetingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'participant' => 'required|integer|min:0',
             'date' => 'required|date',
-            'category_id' => 'required|integer|exists:categories,id', // Assuming you have a category_id field in the form
+            'category_id' => 'required|integer|exists:council_categories,id', // Assuming you have a category_id field in the form
             'user_id' => 'nullable|integer|exists:users,id', // Assuming you have a user_id field in the form for 'components.user-select'
             'description' => 'required|string',
             'result' => 'required|string',
@@ -42,7 +42,7 @@ class StoreMeetingRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Nama Agenda wajib diisi.',
+            'title.required' => 'Nama Agenda wajib diisi.',
             'participant.required' => 'Jumlah Peserta wajib diisi.',
             'date.required' => 'Tanggal Kegiatan wajib diisi.',
             'category_id.required' => 'Kategori wajib dipilih.',

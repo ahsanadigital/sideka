@@ -30,7 +30,7 @@ class MeetingController extends Controller
         if ($request->ajax()) {
             return $this->_datatables->eloquent($this->_meetingModel->query())
                 ->addColumn('user', function (Meeting $decree) {
-                    return $decree->user->toArray();
+                    return $decree->getAttribute('user')->toArray();
                 })
                 ->toJson();
         }
@@ -56,7 +56,9 @@ class MeetingController extends Controller
 
             $meetingData = $this->_meetingModel->create($data->except(['files', 'docs'])->toArray());
 
-            $meetingData->addMediaFromRequest('files')->toMediaCollection('meeting-documentation');
+            $meetingData->addMultipleMediaFromRequest(['files'])->each(function ($fileAdder) {
+                $fileAdder->toMediaCollection('photos');
+            });
             $meetingData->addMediaFromRequest('docs')->toMediaCollection('meeting-docs');
 
             return $this->_responseHelper->success();
