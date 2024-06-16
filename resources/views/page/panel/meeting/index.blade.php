@@ -94,11 +94,11 @@
 @endpush
 
 @push('script')
-    {{-- <script>
+    <script>
         initializeDataTableWithAjax(
             'table-ajax',
             generateAjaxUrl(
-                `{{ route('api.decree.index') }}`, {
+                `{{ route('api.meeting.index') }}`, {
                     council_level: `{{ request('council_level') }}`,
                     category: `{{ request('category') }}`
                 }
@@ -107,22 +107,24 @@
                     data: 'title'
                 },
                 {
-                    data: 'number'
-                },
-                {
-                    data: 'id',
-                    render(a, b, c) {
-                        let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
-                        let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
-                            'Tidak ditentukan';
-                        return `${$start} - ${$end}`;
-                    },
-                },
-                {
                     data: 'user',
                     render(a) {
                         return `<a href="{{ url('/user') }}/${a.id}">${a.fullname}</a>`;
                     },
+                },
+                {
+                    data: 'id',
+                    render(a, b, c) {
+                        // let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
+                        // let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
+                        //     'Tidak ditentukan';
+                        // return `${$start} - ${$end}`;
+                        return '';
+                    },
+                },
+                {
+                    data: 'participant',
+                    render: (a) => `${a} peserta`,
                 },
                 {
                     data: 'id',
@@ -161,5 +163,5 @@
                 runModalConfirmWithSubmit('Data yang akan dihapus, tidak akan kembali lagi.', `#deletedata-${dataId}`)
             }
         }
-    </script> --}}
+    </script>
 @endpush

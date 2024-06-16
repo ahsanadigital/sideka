@@ -7,6 +7,7 @@ use App\Models\Meeting;
 use App\Http\Requests\StoreMeetingRequest;
 use App\Http\Requests\UpdateMeetingRequest;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Yajra\DataTables\DataTables;
 
 class MeetingController extends Controller
@@ -29,8 +30,16 @@ class MeetingController extends Controller
     {
         if ($request->ajax()) {
             return $this->_datatables->eloquent($this->_meetingModel->query())
-                ->addColumn('user', function (Meeting $decree) {
-                    return $decree->getAttribute('user')->toArray();
+                ->addColumn('user', function (Meeting $meeting) {
+                    return $meeting->getAttribute('user')->toArray();
+                })
+                ->addColumn('media', function (Meeting $meeting) {
+                    return $meeting->getAttribute('media')->map(function (Media $media) {
+                        return [
+                            'id' => $media->getAttribute('id'),
+                            'url' => $media->getUrl(),
+                        ];
+                    });
                 })
                 ->toJson();
         }

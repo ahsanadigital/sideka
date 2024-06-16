@@ -30,7 +30,7 @@ class UpdateDecreeRequest extends FormRequest
             'end_to' => 'date|nullable|after_or_equal:start_from',
             'document' => 'nullable|file|max:4096',
             'public' => 'required|boolean',
-            'council_category_id' => 'required|exists:council_categories,id'
+            'category_id' => 'required|exists:council_categories,id'
         ];
     }
 }

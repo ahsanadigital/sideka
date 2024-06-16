@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use App\Enums\MeetingTypeEnum;
+use App\Traits\HasAuthor;
+use App\Traits\HasCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
@@ -20,7 +23,7 @@ use Spatie\MediaLibrary\HasMedia;
  */
 class Meeting extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasCategory, HasAuthor;
 
     /**
      * The attributes that are guarded to mass assignable.

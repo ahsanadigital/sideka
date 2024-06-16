@@ -7,8 +7,8 @@
             </div>
             <div class="modal-body">
 
-                <form action="{{ route('meeting.store') }}" id="createdata-form" class="row"
-                    enctype="multipart/form-data" method="POST">
+                <form action="{{ route('meeting.store') }}" id="createdata-form" class="row form-ajax"
+                    enctype="multipart/form-data" method="POST" data-target="#table-ajax" data-reload-table="true" data-success-message="Berhasil menambahkan data Pertemuan / Rapat">
 
                     @csrf
 

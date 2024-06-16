@@ -26,7 +26,7 @@ class StoreMeetingRequest extends FormRequest
             'participant' => 'required|integer|min:0',
             'date' => 'required|date',
             'category_id' => 'required|integer|exists:council_categories,id', // Assuming you have a category_id field in the form
-            'user_id' => 'nullable|integer|exists:users,id', // Assuming you have a user_id field in the form for 'components.user-select'
+            'users_id' => 'nullable|integer|exists:users,id', // Assuming you have a user_id field in the form for 'components.user-select'
             'description' => 'required|string',
             'result' => 'required|string',
             'files.*' => 'nullable|file|mimes:jpeg,jpg,png|max:2048',

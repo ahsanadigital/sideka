@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Services\FileService;
+use App\Traits\HasAuthor;
+use App\Traits\HasCategory;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Decree extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, HasCategory, HasAuthor;
 
     protected $hidden = [
         'users_id',
@@ -60,7 +62,7 @@ class Decree extends Model
         'document',
         'users_id',
         'public',
-        'council_category_id'
+        'category_id'
     ];
 
     /**
@@ -72,26 +74,6 @@ class Decree extends Model
         'start_from' => 'datetime',
         'end_to' => 'datetime',
     ];
-
-    /**
-     * Getting Category relation
-     *
-     * @return BelongsTo
-     */
-    public function category()
-    {
-        return $this->belongsTo(CouncilCategory::class, 'council_category_id', 'id');
-    }
-
-    /**
-     * User relation method
-     *
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'users_id', 'id');
-    }
 
     /**
      * Get decree pdf file informatin

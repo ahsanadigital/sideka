@@ -44,7 +44,7 @@ class DecreeController extends Controller
                     });
                 })
                 ->when($request->input('category'), function ($query, $category) {
-                    return $query->where('council_category_id', $category);
+                    return $query->where('category_id', $category);
                 });
 
             $decreeData = $this->_datatables->eloquent($query)
