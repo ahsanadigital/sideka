@@ -19,7 +19,6 @@
     @error('users_id')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
-
 </div>
 
 @push('script')
