@@ -54,7 +54,7 @@
             if (event.currentTarget.checked) {
                 var $newOption = $(`<option selected="selected" />`).val("{{ auth()->id() }}").text(
                     "{{ auth()->user()->fullname }}")
-                $('#user-select_{{ $randomElementId }}').append($newOption).trigger('change');
+                $('#user-select_{{ $randomElementId }}').html($newOption).trigger('change');
                 $('#user-select_{{ $randomElementId }}').next('.select2-container').hide()
             } else {
                 $('#user-select_{{ $randomElementId }}').val(null).removeAttr('disabled').trigger('change');

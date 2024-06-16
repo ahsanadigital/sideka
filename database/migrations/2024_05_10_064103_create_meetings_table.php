@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('title', 156);
             $table->enum('type', Meeting::getMeetingTypeEnum()->toArray())->default(MeetingTypeEnum::OTHER->value);
             $table->unsignedInteger('participant')->default(0);
-            $table->string('description', 255)->nullable();
-            $table->string('result', 255)->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('result')->nullable();
 			$table->date('date')->useCurrentOnUpdate();
             $table->foreignId('users_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('category_id')->nullable()->constrained('council_categories')->nullOnDelete()->cascadeOnUpdate();

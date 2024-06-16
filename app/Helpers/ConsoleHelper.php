@@ -25,6 +25,11 @@ class ConsoleHelper
         }
     }
 
+    public static function createProgressbar(?int $total = 100)
+    {
+        return new \Symfony\Component\Console\Helper\ProgressBar(self::$output, $total);
+    }
+
     /**
      * Write an info message to the console.
      *

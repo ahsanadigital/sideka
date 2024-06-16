@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pertemuan dan Rapat')
+@section('title', 'Rapat')
 
 @push('links')
     <link rel="stylesheet" href="{{ asset('dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
@@ -17,6 +17,9 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css"
         crossorigin="anonymous" />
+
+    <!-- FancyBox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @section('content')
@@ -46,6 +49,8 @@
 
     @include('components.show-errors')
     @include('page.panel.meeting.create')
+    @include('page.panel.meeting.show')
+    @include('page.panel.meeting.edit')
 
     <div class="d-flex my-3 justify-content-between">
         <div class="left-side">
@@ -91,6 +96,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @endpush
 
 @push('script')
@@ -115,11 +122,8 @@
                 {
                     data: 'id',
                     render(a, b, c) {
-                        // let $start = moment.utc(c.start_from).locale('id').format('D MMMM YYYY');
-                        // let $end = c.end_to ? moment.utc(c.end_to).locale('id').format('D MMMM YYYY') :
-                        //     'Tidak ditentukan';
-                        // return `${$start} - ${$end}`;
-                        return '';
+                        let $dateFormat = moment.utc(c.date).locale('id').format('D MMMM YYYY');
+                        return `${$dateFormat}`;
                     },
                 },
                 {
@@ -130,7 +134,7 @@
                     data: 'id',
                     render(a) {
                         return `
-                        <form data-target="#table-ajax" data-reload-table="true" action="{{ url('api/decree') }}/${a}" data-success-message="Data berhasil dihapus dari sistem" id="deletedata-${a}" class="form-ajax" method="POST">
+                        <form data-target="#table-ajax" data-reload-table="true" action="{{ url('api/meeting') }}/${a}" data-success-message="Data berhasil dihapus dari sistem" id="deletedata-${a}" class="form-ajax" method="POST">
                             @csrf
                             @method('DELETE')
                         </form>

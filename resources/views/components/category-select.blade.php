@@ -3,7 +3,7 @@
 @endphp
 
 <div class="form-group mb-3">
-    <label for="category-select_{{ $randomElementId }}" class="form-label">Kategori</label>
+    <label for="category-select_{{ $randomElementId }}" class="form-label">{{ $title ?? 'Kategori' }}</label>
 
     <select name="{{ $targetName ?? 'category_id' }}" id="category-select_{{ $randomElementId }}" class="select2 category-select form-control custom-select"
         style="width: 100%; height: 36px">

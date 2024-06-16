@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="editDataLabel">Ubah Data</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
                 <form data-target="#table-ajax" data-reload-table="true" data-reset-form="true"
@@ -26,9 +26,9 @@
                     {{-- Nomenklatur --}}
                     <div class="form-group mb-3">
                         <label class="form-label" for="nomenclature">Nomenklatur</label>
-                        <textarea type="text" rows="5" class="form-control @error('nomenclature') is-invalid @enderror"
-                            value="{{ old('nomenclature') }}" placeholder="Deskripsi surat keputusan&hellip;" name="nomenclature"
-                            id="nomenclature"></textarea>
+                        <input type="text" class="form-control @error('nomenclature') is-invalid @enderror"
+                            value="{{ old('nomenclature') }}" placeholder="Deskripsi surat keputusan&hellip;"
+                            name="nomenclature" id="nomenclature">
 
                         <div class="error-wrapper"></div>
 
@@ -36,6 +36,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
 
                     {{-- Nomor Surat --}}
                     <div class="form-group mb-3">

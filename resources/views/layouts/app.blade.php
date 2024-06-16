@@ -119,7 +119,7 @@
         <nav class="sidebar-nav scroll-sidebar">
             <div class="offcanvas-header justify-content-between">
                 <img src="../../dist/images/logos/favicon.ico" alt="" class="img-fluid">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
             </div>
             <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="" data-simplebar>
                 <ul id="sidebarnav">

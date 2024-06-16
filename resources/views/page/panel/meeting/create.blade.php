@@ -3,12 +3,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalCreationLabel">Tambah Arsip Baru</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
 
                 <form action="{{ route('meeting.store') }}" id="createdata-form" class="row form-ajax"
-                    enctype="multipart/form-data" method="POST" data-target="#table-ajax" data-reload-table="true" data-success-message="Berhasil menambahkan data Pertemuan / Rapat">
+                    enctype="multipart/form-data" method="POST" data-target="#table-ajax" data-reload-table="true"
+                    data-reset-form="true" data-success-message="Berhasil menambahkan data Pertemuan / Rapat">
 
                     @csrf
 
@@ -51,19 +52,24 @@
                             @enderror
                         </div>
 
-                        @include('components.category-select', ['targetName' => 'category_id'])
+                        @include('components.category-select', [
+                            'targetName' => 'category_id',
+                            'title' => 'Jenis Rapat',
+                        ])
 
                         @includeWhen(auth()->user()->hasRole(['region', 'regency']),
                             'components.user-select')
 
                         @include('components.quill-editor', [
                             'targetId' => 'description',
+                            'placeholder' => 'Silahkan isikan penjelasan rapat ini.',
                             'label' => 'Deskripsi Agenda',
                         ])
 
                         @include('components.quill-editor', [
                             'targetId' => 'result',
-                            'label' => 'Hasil Rapat',
+                            'placeholder' => 'Silahkan isikan notulensi hasil rapat ini.',
+                            'label' => 'Notulensi Hasil Rapat',
                         ])
                     </div>
                     <div class="col-md-6">
@@ -145,7 +151,7 @@
 
 @push('script')
     <script>
-        var startDateInput = document.querySelector('input[name="date"]');
+        var startDateInput = document.querySelector('#modalCreation').querySelector('input[name="date"]');
         var instanceStartDate = new tempusDominus.TempusDominus(startDateInput, {
             container: startDateInput.closest('.modal'),
             display: {

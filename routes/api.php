@@ -23,6 +23,8 @@ Route::apiResource('user', App\Http\Controllers\UserController::class)->names(['
 Route::apiResource('council-category', App\Http\Controllers\CouncilCategoryController::class)->names(['index' => 'api.council-category.index']);
 Route::apiResource('meeting', App\Http\Controllers\MeetingController::class)->names(['index' => 'api.meeting.index']);
 
+Route::delete('media/removal/{media}', App\Http\Controllers\MediaRemovalController::class)->name('api.media.remove');
+
 Route::prefix('miscellaneous')->group(function() {
     Route::get('download-file', [App\Http\Controllers\UtilsController::class, 'downloadFile'])->name('download-file');
     Route::any('search-data', [App\Http\Controllers\UtilsController::class, 'searchData'])->name('search');

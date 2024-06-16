@@ -1,7 +1,7 @@
 <div class="form-group mb-3">
     <label class="form-label" for="{{ $targetId }}">{{ $label }}</label>
     <div style="height: 200px" id="{{ $targetId }}">{!! old($targetId) !!}</div>
-    <input type="hidden" name="{{ $targetId }}" value="{{ old($targetId) }}" />
+    <input type="hidden" name="{{ $targetName ?? $targetId }}" value="{{ old($targetId) }}" />
 
     @error($targetId)
         <div class="invalid-feedback">{{ $message }}</div>
@@ -12,7 +12,7 @@
     <script>
         var quillEditorInit = initQuillEditor("#{{ $targetId }}", {
             theme: "snow",
-            placeholder: "Isikan deskripsi agenda rapat kali ini...",
+            placeholder: "{{ $placeholder ?? 'Isikan deskripsinya...' }}",
             height: '200px',
         });
 

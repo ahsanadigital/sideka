@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * File: base.js
  * Description: This file contains any code for core JavaScript notification and AJAX.
@@ -5,6 +7,79 @@
  * Created: 2024-05-09
  * Last Modified: 2024-05-09
  */
+
+/**
+ * Menghapus galeri item dengan mengirimkan AJAX request ke removal API.
+ *
+ * @param {string} dataId - ID galeri item yang akan dihapus.
+ */
+function removeGallery(dataId, baseUrl) {
+    Swal.fire({
+        title: 'Hapus Galeri',
+        text: 'Apakah Anda yakin ingin menghapus galeri ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#E74C3C', // warna merah agak mix kemudaan dikit
+        cancelButtonColor: '#AAAAAA' // warna putih agak abu2
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                data: {"_method": "DELETE"},
+                url: `${baseUrl}/${dataId}`,
+                success: function () {
+                    $(`[data-gallery-id="${dataId}"]`).remove();
+                    Swal.fire("Berhasil", "Galeri telah dihapus", "success");
+                },
+            });
+        }
+    });
+}
+
+/**
+ * Sets the contents of a Quill editor from an HTML string.
+ *
+ * @param {string} realHTML - The HTML string to convert and set as the editor's contents.
+ * @param {Quill} quill - The Quill editor instance.
+ */
+function setQuillContents(realHTML, quill) {
+    const initialContent = quill.clipboard.convert(realHTML);
+    quill.setContents(initialContent, "ilent");
+}
+
+/**
+ * Decode HTML entities back to their corresponding characters,
+ * excluding the <script> and </script> tags.
+ *
+ * @param {string} input The HTML string with entities to decode.
+ * @returns {string} The decoded HTML string.
+ */
+const htmlEntityDecodes = (input) => {
+    const entities = {
+        "&quot;": '"',
+        "&amp;": "&",
+        "&lt;": "<",
+        "&gt;": ">",
+        "&#039;": "'",
+        "&#x27;": "'",
+        "&#x2F;": "/",
+        "&#96;": "`",
+    };
+
+    const excludedEntities = {
+        "&lt;script&gt;": "<script>",
+        "&lt;/script&gt;": "</script>",
+    };
+
+    const allEntities = { ...entities, ...excludedEntities };
+
+    return input.replace(
+        /&(quot|amp|lt|gt|#039|#x27|#x2F|#96|lt;script|lt;\/script);/g,
+        (match) => allEntities[match + ";"] || match
+    );
+};
 
 /**
  * Displays a SweetAlert2 notification with the provided options.

@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="modalCreationLabel">Tambah Baru</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
                 <form data-target="#table-ajax" data-reload-table="true" action="{{ route('decree.store') }}"
@@ -25,9 +25,9 @@
                     {{-- Nomenklatur --}}
                     <div class="form-group mb-3">
                         <label class="form-label" for="nomenclature">Nomenklatur</label>
-                        <textarea type="text" rows="5" class="form-control @error('nomenclature') is-invalid @enderror"
-                            value="{{ old('nomenclature') }}" placeholder="Deskripsi surat keputusan&hellip;" name="nomenclature"
-                            id="nomenclature"></textarea>
+                        <input type="text" class="form-control @error('nomenclature') is-invalid @enderror"
+                            value="{{ old('nomenclature') }}" placeholder="Deskripsi surat keputusan&hellip;"
+                            name="nomenclature" id="nomenclature">
 
                         <div class="error-wrapper"></div>
 
@@ -35,6 +35,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
 
                     {{-- Nomor Surat --}}
                     <div class="form-group mb-3">
@@ -122,7 +123,8 @@
                                 <input type="radio" name="public" id="publik" name="options"
                                     value="1" />
                                 <label for="publik">
-                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
+                                    <div
+                                        class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/public.png') }}" height="32"
                                             alt="Publikasikan" />
 
@@ -137,7 +139,8 @@
                                 <input type="radio" name="public" id="private" name="options"
                                     value="0" />
                                 <label for="private">
-                                    <div class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
+                                    <div
+                                        class="d-flex gap-2 py-2 w-100 align-items-center flex-column justify-content-center">
                                         <img src="{{ asset('core/images/icons/private.png') }}" height="32"
                                             alt="Publikasikan" />
 

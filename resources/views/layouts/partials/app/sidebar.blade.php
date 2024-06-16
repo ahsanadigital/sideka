@@ -164,11 +164,11 @@
     <!-- ============================= -->
     <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">Informasi dan Pengguna</span>
+        <span class="hide-menu">Informasi</span>
     </li>
 
     <li class="sidebar-item">
-        <a class="sidebar-link" href="#" aria-expanded="false">
+        <a class="sidebar-link" href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Fitur ini masih belum tersedia." aria-expanded="false">
             <span>
                 <i class="ti ti-history"></i>
             </span>
@@ -177,7 +177,7 @@
     </li>
 
     <li class="sidebar-item">
-        <a class="sidebar-link" href="#" aria-expanded="false">
+        <a class="sidebar-link" href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Fitur ini masih belum tersedia." aria-expanded="false">
             <span>
                 <i class="ti ti-history"></i>
             </span>
@@ -186,7 +186,7 @@
     </li>
 
     <li class="sidebar-item">
-        <a class="sidebar-link" href="#" aria-expanded="false">
+        <a class="sidebar-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Fitur ini masih belum tersedia." aria-expanded="false">
             <span>
                 <i class="ti ti-info-circle"></i>
             </span>

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Helpers\ConsoleHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -109,5 +111,38 @@ class FileService
         }
 
         return null;
+    }
+
+
+    /**
+     * Do delete storage disk
+     *
+     * @return void
+     */
+    public static function cleanupDisk(): void
+    {
+        ConsoleHelper::info("Cleaning storage start");
+
+        $progressBar = ConsoleHelper::createProgressbar();
+        $directory = storage_path('app/public');
+
+        // Start the progress bar
+        $progressBar->setMessage('Starting...');
+        $progressBar->start();
+
+        // Ensure the directory exists before attempting to clean it
+        if (File::exists($directory)) {
+            // Recursively delete files and directories
+            File::deleteDirectory($directory, $preserve = false);
+
+            // Recreate the directory to keep the structure intact
+            File::makeDirectory($directory);
+
+            $progressBar->advance();
+            $progressBar->finish();
+
+            // Show the success info
+            ConsoleHelper::success("Successfuly cleanup the storage.");
+        }
     }
 }

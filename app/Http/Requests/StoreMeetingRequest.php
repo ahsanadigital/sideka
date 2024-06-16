@@ -26,7 +26,7 @@ class StoreMeetingRequest extends FormRequest
             'participant' => 'required|integer|min:0',
             'date' => 'required|date',
             'category_id' => 'required|integer|exists:council_categories,id', // Assuming you have a category_id field in the form
-            'users_id' => 'nullable|integer|exists:users,id', // Assuming you have a user_id field in the form for 'components.user-select'
+            'users_id' => 'required|integer|exists:users,id', // Assuming you have a user_id field in the form for 'components.user-select'
             'description' => 'required|string',
             'result' => 'required|string',
             'files.*' => 'nullable|file|mimes:jpeg,jpg,png|max:2048',
@@ -47,6 +47,7 @@ class StoreMeetingRequest extends FormRequest
             'date.required' => 'Tanggal Kegiatan wajib diisi.',
             'category_id.required' => 'Kategori wajib dipilih.',
             'description.required' => 'Deskripsi Agenda wajib diisi.',
+            'users_id.required' => 'Penyelenggara Agenda wajib dipilih.',
             'result.required' => 'Hasil Rapat wajib diisi.',
             'files.*.mimes' => 'Unggah berkas harus berupa file dengan tipe: jpeg, jpg, png.',
             'files.*.max' => 'Unggah berkas tidak boleh lebih dari 2MB.',
