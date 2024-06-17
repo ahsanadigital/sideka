@@ -29,7 +29,17 @@ class MeetingController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return $this->_datatables->eloquent($this->_meetingModel->query())
+            $query = $this->_meetingModel->query()
+                ->when($request->input('council_level'), function ($query, $authorLevel) {
+                    return $query->whereHas('user.roles', function ($query) use ($authorLevel) {
+                        $query->where('name', $authorLevel);
+                    });
+                })
+                ->when($request->input('category'), function ($query, $category) {
+                    return $query->where('category_id', $category);
+                });
+
+            return $this->_datatables->eloquent($query)
                 ->addColumn('user', function (Meeting $meeting) {
                     return $meeting->getAttribute('user')->toArray();
                 })

@@ -1,3 +1,8 @@
+@php
+    $currentUrl = request()->fullUrl();
+    $isActive = strpos($currentUrl, route('meeting.index')) === 0;
+@endphp
+
 <ul id="sidebarnav">
     <!-- ============================= -->
     <!-- Home -->
@@ -75,7 +80,7 @@
             <span>
                 <i class="ti ti-messages"></i>
             </span>
-            <span class="hide-menu">Pertemuan</span>
+            <span class="hide-menu">Rapat</span>
         </a>
     </li>
 

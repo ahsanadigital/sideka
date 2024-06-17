@@ -32,7 +32,6 @@
         </div>
     </div>
 
-
     <div class="row my-3 justify-content-end">
         <div class="right-side d-flex col-md-4 justify-content-end gap-2 align-items-center">
             <a href="#" class="btn btn-success d-flex gap-2 align-items-center" onclick="refreshTable()">

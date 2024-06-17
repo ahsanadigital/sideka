@@ -19,7 +19,9 @@
         crossorigin="anonymous" />
 
     <!-- FancyBox -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
+        integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @section('content')
@@ -52,10 +54,32 @@
     @include('page.panel.meeting.show')
     @include('page.panel.meeting.edit')
 
-    <div class="d-flex my-3 justify-content-between">
-        <div class="left-side">
+    <div class="row my-3 justify-content-between">
+        <div class="left-side col-md-4">
+            <form action="{{ request()->fullUrl() }}" class="d-flex gap-2" id="auto-submit-form">
+                <select name="council_level" id="council_level" class="form-select" onchange="this.form.submit()">
+                    <option value="">Semua</option>
+                    @foreach (RoleUserEnum::cases() as $roles)
+                        <option value="{{ $roles->value }}"
+                            {{ request('council_level') == $roles->value ? 'selected' : '' }}>{{ $roles->label() }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <select name="category" id="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">Semua</option>
+                    @forelse ($councilCategories as $council)
+                        <option value="{{ $council->id }}"
+                            {{ request('category') == $council->id ? 'selected' : '' }}>
+                            {{ $council->name }}
+                        </option>
+                    @empty
+                        <option value="">Tidak ada kategori</option>
+                    @endforelse
+                </select>
+            </form>
         </div>
-        <div class="right-side d-flex gap-2 align-items-center">
+        <div class="right-side d-flex justify-content-end col-md-4 d-flex gap-2 align-items-center">
             <a href="#" class="btn btn-success d-flex gap-2 align-items-center" onclick="refreshTable()">
                 <i class="ti ti-reload"></i><span>Segarkan</span>
             </a>
@@ -97,7 +121,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+        integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @endpush
 
 @push('script')

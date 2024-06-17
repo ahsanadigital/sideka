@@ -13,7 +13,7 @@ class AchievementController extends Controller
      */
     public function index()
     {
-        //
+        return view('page.panel.achievement.index');
     }
 
     /**

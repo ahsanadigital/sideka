@@ -33,7 +33,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Image Preload -->
-    <link rel="preload" href="{{ auth()->user()->image ? asset('storage/'. auth()->user()->image) : Gravatar::get(auth()->user()->email) }}" as="image" />
+    <link rel="preload"
+        href="{{ auth()->user()->image ? asset('storage/' . auth()->user()->image) : Gravatar::get(auth()->user()->email) }}"
+        as="image" />
 
     <!-- Core Css -->
     <link rel="stylesheet"

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasAuthor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ * Achievement Model for Data
  *
  * @method static \Database\Factories\AchievementFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Achievement newModelQuery()
@@ -16,5 +17,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Achievement extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAuthor;
 }

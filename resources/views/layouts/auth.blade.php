@@ -76,6 +76,7 @@
     @yield('script')
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
     @include('components.scripts.submitform')
+    <script src="{{ asset('core/js/base.js') }}"></script>
 </body>
 
 </html>
