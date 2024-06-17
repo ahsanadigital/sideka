@@ -194,6 +194,9 @@ return [
         'CouncilCategoryEnum' => \App\Enums\CouncilCategoryEnum::class,
         'MeetingTypeEnum' => \App\Enums\MeetingTypeEnum::class,
         'RoleUserEnum' => \App\Enums\RoleUserEnum::class,
+
+        // Helper Alias
+        'UrlHelper' => \App\Helpers\UrlHelper::class,
     ])->toArray(),
 
 ];

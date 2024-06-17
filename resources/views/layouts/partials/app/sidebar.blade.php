@@ -1,8 +1,3 @@
-@php
-    $currentUrl = request()->fullUrl();
-    $isActive = strpos($currentUrl, route('meeting.index')) === 0;
-@endphp
-
 <ul id="sidebarnav">
     <!-- ============================= -->
     <!-- Home -->
@@ -12,7 +7,7 @@
         <span class="hide-menu">Dasbor</span>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('home') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('home') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('home') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-home"></i>
@@ -30,7 +25,7 @@
         <span class="hide-menu">Master Data</span>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('council-category.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('council-category.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('council-category.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-package"></i>
@@ -39,7 +34,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('user.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('user.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('user.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-users"></i>
@@ -66,7 +61,7 @@
         <span class="hide-menu">Aktivitas Dewan Kerja</span>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('decree.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('decree.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('decree.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-file-type-pdf"></i>
@@ -75,7 +70,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('meeting.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('meeting.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('meeting.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-messages"></i>
@@ -84,7 +79,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('letter.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('letter.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('letter.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-file"></i>
@@ -93,7 +88,7 @@
         </a>
     </li>
 {{--
-    <li class="sidebar-item {{ request()->routeIs('council.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('council.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('council.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-building"></i>
@@ -137,7 +132,7 @@
         </ul>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('member.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('member.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('member.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-users"></i>
@@ -146,7 +141,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('member.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('member.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('member.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-plane-tilt"></i>
@@ -155,7 +150,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->routeIs('achievement.*') ? 'active' : '' }}">
+    <li class="sidebar-item {{ UrlHelper::isExactUrl('achievement.index') ? 'active' : '' }}">
         <a class="sidebar-link" href="{{ route('achievement.index') }}" aria-expanded="false">
             <span>
                 <i class="ti ti-trophy"></i>
