@@ -46,6 +46,10 @@ class MeetingController extends Controller
                 ->toJson();
         }
 
+        if ($request->route()->getPrefix() === 'api') {
+            return abort(403);
+        }
+
         return view('page.panel.meeting.index');
     }
 

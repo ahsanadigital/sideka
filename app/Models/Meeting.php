@@ -33,6 +33,12 @@ class Meeting extends Model implements HasMedia
      */
     protected $guarded = [];
 
+    /**
+     * Register media conversions for the meeting.
+     *
+     * @param Media|null $media The media to register conversions for.
+     * @return void
+     */
     public function registerMediaConversions(Media|null $media = null): void
     {
         $this

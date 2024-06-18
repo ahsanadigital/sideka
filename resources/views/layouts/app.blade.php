@@ -107,8 +107,12 @@
         <div class="body-wrapper">
             @include('layouts.partials.app.header')
 
-            <div class="container-fluid mw-100">
+            <div class="container-fluid mw-100 min-vh-100 d-flex flex-column">
                 @yield('content')
+
+                <div class="mt-auto pt-3">
+                    Hak Cipta 2024 DKD Jawa Timur
+                </div>
             </div>
         </div>
         <div class="dark-transparent sidebartoggler"></div>

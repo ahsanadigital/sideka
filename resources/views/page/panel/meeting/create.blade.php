@@ -28,7 +28,10 @@
                         <div class="form-group mb-3">
                             <label class="form-label" for="participant">Jumlah Peserta</label>
                             <input type="number" class="form-control @error('participant') is-invalid @enderror"
-                                id="participant" name="participant" value="{{ old('participant') }}">
+                                id="participant" name="participant" value="{{ old('participant') }}" />
+
+                            <div class="error-wrapper"></div>
+
                             @error('participant')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -46,6 +49,8 @@
                                     <i class="ti ti-calendar" aria-hidden="true"></i>
                                 </div>
                             </div>
+
+                            <div class="error-wrapper"></div>
 
                             @error('date')
                                 <div class="invalid-feedback">{{ $message }}</div>

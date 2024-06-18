@@ -15,19 +15,19 @@
  */
 function removeGallery(dataId, baseUrl) {
     Swal.fire({
-        title: 'Hapus Galeri',
-        text: 'Apakah Anda yakin ingin menghapus galeri ini?',
-        icon: 'warning',
+        title: "Hapus Galeri",
+        text: "Apakah Anda yakin ingin menghapus galeri ini?",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#E74C3C', // warna merah agak mix kemudaan dikit
-        cancelButtonColor: '#AAAAAA' // warna putih agak abu2
+        confirmButtonText: "Ya, Hapus",
+        cancelButtonText: "Batal",
+        confirmButtonColor: "#E74C3C", // warna merah agak mix kemudaan dikit
+        cancelButtonColor: "#AAAAAA", // warna putih agak abu2
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
                 type: "POST",
-                data: {"_method": "DELETE"},
+                data: { _method: "DELETE" },
                 url: `${baseUrl}/${dataId}`,
                 success: function () {
                     $(`[data-gallery-id="${dataId}"]`).remove();
@@ -763,6 +763,13 @@ function initFormAjax(target, onSuccess, onError, onFinish) {
                                 form.data("success-message") ??
                                     "Telah berhasil dilakukan!"
                             );
+
+                            if (
+                                xhr.status === 200 &&
+                                typeof reloadFunction !== "undefined"
+                            ) {
+                                reloadFunction();
+                            }
                         }
                     },
                     function (xhr, status, error) {

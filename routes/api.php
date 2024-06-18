@@ -22,6 +22,7 @@ Route::apiResource('decree', App\Http\Controllers\DecreeController::class)->name
 Route::apiResource('user', App\Http\Controllers\UserController::class)->names(['index' => 'api.user.index']);
 Route::apiResource('council-category', App\Http\Controllers\CouncilCategoryController::class)->names(['index' => 'api.council-category.index']);
 Route::apiResource('meeting', App\Http\Controllers\MeetingController::class)->names(['index' => 'api.meeting.index']);
+Route::apiResource('achievement', App\Http\Controllers\AchievementController::class)->names(['index' => 'api.achievement.index']);
 
 Route::delete('media/removal/{media}', App\Http\Controllers\MediaRemovalController::class)->name('api.media.remove');
 

@@ -1,13 +1,27 @@
-@can('region')
+@role('region')
     @php
         $randomElementId = \Str::uuid();
     @endphp
 
+    @push('links')
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+        <!-- Or for RTL support -->
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+        <link rel="stylesheet" href="{{ asset('dist/libs/select2/dist/css/select2.min.css') }}" />
+    @endpush
+
+    @push('script')
+        <script src="{{ asset('dist/libs/select2/dist/js/select2.full.min.js') }}"></script>
+        <script src="{{ asset('dist/libs/select2/dist/js/select2.min.js') }}"></script>
+    @endpush
+
     <div class="form-group mb-3">
         <label for="user-select_{{ $randomElementId }}" class="form-label">Pengunggah</label>
 
-        <select name="users_id" id="user-select_{{ $randomElementId }}" class="select2 user-select form-control custom-select"
-            style="width: 100%; height: 36px">
+        <select name="users_id" id="user-select_{{ $randomElementId }}"
+            class="select2 user-select form-control custom-select" style="width: 100%; height: 36px">
         </select>
 
         <div class="form-check mt-2">
@@ -65,4 +79,4 @@
     @endpush
 @else
     <input type="hidden" name="users_id" value="{{ auth()->id() }}">
-@endcan
+@endrole

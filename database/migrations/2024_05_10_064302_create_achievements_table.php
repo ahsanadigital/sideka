@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
-			$table->string('name', 156);
-			$table->string('description', 255);
+			$table->string('name');
+			$table->longText('description');
 			$table->date('date');
-			$table->string('place', 255);
+			$table->string('place');
 			$table->longText('notes');
             $table->foreignId('users_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
         });

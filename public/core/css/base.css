@@ -82,3 +82,8 @@
 .section-description p:last-child {
     margin-bottom: 0 !important;
 }
+
+.no-caret .dropdown-toggle::after,
+.no-caret.dropdown-toggle::after {
+    display: none;
+}

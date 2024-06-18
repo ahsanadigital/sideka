@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CouncilCategorySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            AchievementSeeder::class,
         ]);
     }
 }
