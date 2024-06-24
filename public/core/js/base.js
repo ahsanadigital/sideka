@@ -709,66 +709,58 @@ function initFormAjax(target, onSuccess, onError, onFinish) {
                             onSuccess(response, status, xhr);
                         }
 
-                        if (
-                            xhr.status === 200 &&
-                            form.data("redirect-on-success")
-                        ) {
-                            toastrToast(
-                                "success",
-                                "Berhasil!",
-                                form.data("success-message") ??
-                                    "Telah berhasil dilakukan!"
-                            );
+                        if (xhr.status === 200) {
+                            if (form.data("redirect-on-success")) {
+                                toastrToast(
+                                    "success",
+                                    "Berhasil!",
+                                    form.data("success-message") ??
+                                        "Telah berhasil dilakukan!"
+                                );
 
-                            setTimeout(function () {
-                                window.location.href =
-                                    form.data("redirect-on-success") ?? "";
-                            }, 5000);
-                        }
+                                setTimeout(function () {
+                                    window.location.href =
+                                        form.data("redirect-on-success") ?? "";
+                                }, 5000);
+                            } else if (form.data("reload-table")) {
+                                enableInputs();
 
-                        if (xhr.status === 200 && form.data("reload-table")) {
-                            enableInputs();
+                                var tableId = form.data("target");
+                                reloadDataTable(`${tableId}`);
 
-                            var tableId = form.data("target");
-                            reloadDataTable(`${tableId}`);
+                                toastrToast(
+                                    "success",
+                                    "Berhasil!",
+                                    form.data("success-message") ??
+                                        "Telah berhasil dilakukan!"
+                                );
+                            } else if (form.data("reset-form") === true) {
+                                form[0].reset();
+                                enableInputs();
 
-                            toastrToast(
-                                "success",
-                                "Berhasil!",
-                                form.data("success-message") ??
-                                    "Telah berhasil dilakukan!"
-                            );
-                        }
+                                form.parents(".modal").modal("hide");
+                                form.find(".file-upload-container .file-list")
+                                    .addClass("d-none")
+                                    .html("");
 
-                        if (
-                            xhr.status === 200 &&
-                            form.data("reset-form") === true
-                        ) {
-                            form[0].reset();
-                            enableInputs();
+                                form.find(".datepicker")?.datepicker(
+                                    "update",
+                                    ""
+                                );
+                                form.find("select.select2")
+                                    ?.empty()
+                                    .trigger("change");
 
-                            form.parents(".modal").modal("hide");
-                            form.find(".file-upload-container .file-list")
-                                .addClass("d-none")
-                                .html();
-
-                            form.find(".datepicker")?.datepicker("update", "");
-                            form.find("select.select2")
-                                ?.empty()
-                                .trigger("change");
-
-                            toastrToast(
-                                "success",
-                                "Berhasil!",
-                                form.data("success-message") ??
-                                    "Telah berhasil dilakukan!"
-                            );
-
-                            if (
-                                xhr.status === 200 &&
-                                typeof reloadFunction !== "undefined"
-                            ) {
-                                reloadFunction();
+                                toastrToast(
+                                    "success",
+                                    "Berhasil!",
+                                    form.data("success-message") ??
+                                        "Telah berhasil dilakukan!"
+                                );
+                            } else {
+                                if (typeof reloadFunction !== "undefined") {
+                                    reloadFunction();
+                                }
                             }
                         }
                     },

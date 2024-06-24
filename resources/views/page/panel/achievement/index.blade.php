@@ -194,7 +194,7 @@
                 let html = '';
                 data.forEach(function(item) {
                     html += `
-                    <div class="col-md-3">
+                    <div class="col-md-3 card-item">
                         <form action="{{ url('api/achievement') }}/${item.id}" data-success-message="Data berhasil dihapus dari sistem" id="deletedata-${item.id}" class="form-ajax" method="POST">
                             @csrf
                             @method('DELETE')

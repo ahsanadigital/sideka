@@ -86,4 +86,5 @@
 .no-caret .dropdown-toggle::after,
 .no-caret.dropdown-toggle::after {
     display: none;
+    content: '';
 }

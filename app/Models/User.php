@@ -96,16 +96,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the parent of user
-     *
-     * @return BelongsTo
-     */
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
      * Get the decree based on user
      *
      * @return HasMany
@@ -132,12 +122,32 @@ class User extends Authenticatable
      */
     public function getRoles(): string
     {
-        return $this->roles->pluck('name')->map(function($item) {
-            return match($item) {
+        return $this->roles->pluck('name')->map(function ($item) {
+            return match ($item) {
                 'region' => RoleUserEnum::DKD,
                 'regency' => RoleUserEnum::DKC,
                 'district' => RoleUserEnum::DKR,
             };
-        })->map(fn($items) => $items->label())->implode(', ');
+        })->map(fn ($items) => $items->label())->implode(', ');
+    }
+
+    /**
+     * Get the parent of user
+     *
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    /**
+     * Get the children of user
+     *
+     * @return HasMany
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(User::class, 'users_id');
     }
 }
