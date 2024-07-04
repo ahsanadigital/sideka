@@ -96,16 +96,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the decree based on user
-     *
-     * @return HasMany
-     */
-    public function decree(): HasMany
-    {
-        return $this->hasMany(Decree::class);
-    }
-
-    /**
      * Getting array of Role Users from Enum
      *
      * @return Collection
@@ -149,5 +139,37 @@ class User extends Authenticatable
     public function children(): HasMany
     {
         return $this->hasMany(User::class, 'users_id');
+    }
+
+    // Councils Data Relations ====================================================
+
+    /**
+     * Getting relation to Achievement data
+     *
+     * @return HasMany
+     */
+    public function achievement(): HasMany
+    {
+        return $this->hasMany(Achievement::class, 'users_id');
+    }
+
+    /**
+     * Getting relation to Decree data
+     *
+     * @return HasMany
+     */
+    public function decree(): HasMany
+    {
+        return $this->hasMany(Decree::class, 'users_id');
+    }
+
+    /**
+     * Getting relation to Meeting data
+     *
+     * @return HasMany
+     */
+    public function meeting(): HasMany
+    {
+        return $this->hasMany(Meeting::class, 'users_id');
     }
 }
